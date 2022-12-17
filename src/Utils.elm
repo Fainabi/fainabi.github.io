@@ -24,11 +24,11 @@ slack_off_time : Time.Posix -> String
 slack_off_time time =
   let
     t = Time.posixToMillis time
-    diff = (t - 1671087063360) // 1000
+    diff = (t - 1671261642608) // 1000
     dhm = seconds_to_days diff
     day = String.fromInt dhm.day
     hour = String.fromInt dhm.hour
     min = String.fromInt dhm.minute
     scs = String.fromInt dhm.second
   in
-    day ++ " days, " ++ hour ++ " hours, " ++ min ++ " mins, " ++ scs ++ " seconds"
+    day ++ " days, " ++ hour ++ " hours, " ++ min ++ " mins, " ++ scs ++ " seconds, current is " ++ (String.fromInt t)
