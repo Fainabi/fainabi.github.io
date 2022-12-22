@@ -1,13 +1,21 @@
 module Article.Section exposing (..)
 
-import Html exposing (..)
 import Browser exposing (..)
+import Html exposing (..)
+import Regex
+
+type alias Section = 
+    { h : Int
+    , name : String
+    }
 
 
-type Section = Section Int String
-
-type FoldableSection = FoldableSection Section (List Section)
-
+nameToId : String -> String
+nameToId =
+    String.trim 
+        >> String.toLower 
+        >> Regex.replace 
+            (Maybe.withDefault Regex.never <| Regex.fromString " +") (\_ -> "-")
 
 numberOfSharp : List Char -> Int
 numberOfSharp s =
@@ -34,8 +42,7 @@ extractSections article =
 
 toMsg : Section -> Html msg
 toMsg s =
-    case s of
-        Section h content -> (String.fromInt h) ++ ", " ++ content |> text
+    (String.fromInt s.h) ++ ", " ++ s.name |> text
 
 toMsgAll : List Section -> Html msg
 toMsgAll ls =    

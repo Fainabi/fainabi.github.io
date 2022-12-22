@@ -5,6 +5,8 @@ import Html.Events exposing (onClick)
 import Article.Body exposing (..)
 import Browser
 import Url.Builder
+import Article.SideNav
+
 
 
 main : Program () Model Msg
@@ -19,12 +21,13 @@ main =
 type Model
     = Empty
     | Clicked
-    | TestArticle Article.Body.Model
-    | ParsedOver Article.Body.Model
+    | TestArticle Article.Body.Model Article.SideNav.Model
+    | ParsedOver Article.Body.Model Article.SideNav.Model
 
 type Msg 
     = GetTestArticle
     | GotTestArticle Article.Body.Msg
+    | GotSideNavigator Article.SideNav.Msg
 
 init : () -> ( Model, Cmd Msg )
 init _ = ( Empty, Cmd.none )
@@ -34,11 +37,18 @@ update msg model =
     case (msg, model) of
         (GetTestArticle, _) -> 
             let (m, msg_a) = Article.Body.init (Url.Builder.absolute ["articles", "test.md"] [])
-            in (TestArticle m, Cmd.map GotTestArticle msg_a)
+            in (TestArticle m (Article.SideNav.init m), Cmd.map GotTestArticle msg_a)
 
-        (GotTestArticle aMsg, TestArticle aModel) ->
+        (GotTestArticle aMsg, TestArticle aModel sModel) ->
             let (m, msg_a) = Article.Body.update aMsg aModel
-            in (ParsedOver m, Cmd.map GotTestArticle msg_a)
+                
+                (newS, _) = 
+                    Article.SideNav.update (Article.SideNav.Reload m) sModel
+            in (ParsedOver m newS, Cmd.none)
+
+        (GotSideNavigator sMsg, ParsedOver aModel sModel) ->
+            let (m, _) = Article.SideNav.update sMsg sModel
+            in (ParsedOver aModel m, Cmd.none)
 
         _ -> (Clicked, Cmd.none)
 
@@ -49,15 +59,19 @@ view model =
         Empty -> div [] 
             [ button [ onClick GetTestArticle ] [ text "Get Test Markdown" ]]
 
-        TestArticle article -> 
+        TestArticle article _ -> 
             div [] 
                 [ Html.map GotTestArticle (Article.Body.view article) ]
         
         Clicked -> div [] [text "clicked"]
     
-        ParsedOver article -> 
+        ParsedOver article sidenav -> 
             div [] 
                 [ Html.map GotTestArticle (Article.Body.view article) 
-                , text "over"]
+                , text "over\n"
+                , text "the side navigator is:\n"
+                , Html.map GotSideNavigator (Article.SideNav.view sidenav)
+                , text "\n from \n"
+                , text <| Debug.toString sidenav]
     
 

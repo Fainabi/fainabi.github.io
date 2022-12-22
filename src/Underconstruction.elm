@@ -6,23 +6,32 @@ import Time
 import Utils exposing (slack_off_time)
 import Helper
 import Browser
+import Session exposing (Session)
+import Browser.Navigation as Nav
 
-main : Program () Model Msg
-main =
-    Browser.element
-        { init = init
-        , view = view
-        , update = update
-        , subscriptions = \_ -> Sub.none
-        }
+-- main : Program () Model Msg
+-- main =
+--     Browser.element
+--         { init = init
+--         , view = view
+--         , update = update
+--         , subscriptions = \_ -> Sub.none
+--         }
 
 type Model 
-    = Plan
-    | PlanWithTime Time.Posix Helper.Model
+    = Plan Session
+    | PlanWithTime Time.Posix Helper.Model Session
 
-init : () -> (Model, Cmd Msg)
-init _ = 
-    (   Plan
+getSession : Model -> Session
+getSession model =
+    case model of
+        Plan s -> s
+
+        PlanWithTime _ _ s -> s
+
+init : Session -> (Model, Cmd Msg)
+init session = 
+    (   Plan session
     ,   Task.perform GetTime Time.now
     )
 
@@ -36,11 +45,11 @@ update msg model =
     case (msg, model) of
         (GetTime time, _) -> 
             let (hMdl, hMsg) = (Helper.init ())
-            in (PlanWithTime time hMdl, Cmd.map GotHelper hMsg)
+            in (PlanWithTime time hMdl (getSession model), Cmd.map GotHelper hMsg)
 
-        (GotHelper helperMsg, PlanWithTime time helper) ->
+        (GotHelper helperMsg, PlanWithTime time helper s) ->
             let (newHelper, newMsg) = Helper.update helperMsg helper
-            in (PlanWithTime time newHelper, Cmd.map GotHelper newMsg)
+            in (PlanWithTime time newHelper s, Cmd.map GotHelper newMsg)
     
         _ -> (model, Cmd.none)
 
@@ -57,12 +66,12 @@ view model =
             ]
         , div [] [ 
             case model of 
-                PlanWithTime t helper -> 
+                PlanWithTime t helper _ -> 
                     div [] 
                     [ text ("the blogger has been slacking off for " ++ slack_off_time t)
                     , Html.map GotHelper (Helper.view helper)]
 
-                Plan -> text ""
+                Plan _ -> text ""
             ]
         ]
 

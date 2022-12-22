@@ -1,16 +1,18 @@
 module Article.Body exposing (..)
 
-import Article.Attribute exposing (ArticleAttribute)
-import Article.Section exposing (Section)
 import Html exposing (..)
 import Html.Attributes exposing (class)
 import Http
-import Article.Utils exposing (..)
+import Debug
 import Markdown
+
+import Article.Utils exposing (..)
+import Article.Attribute as ArticleAttr exposing (ArticleAttribute)
+import Article.Section exposing (Section)
 
 
 type Model 
-    = Loading
+    = Loading String
     | Failure Http.Error
     | Unknown
     | Article 
@@ -21,14 +23,12 @@ type Model
         }
 
 type Msg
-    = Top
-    | ToSection Section
-    | ToPos
-    | GetArticle (Result Http.Error String)
+    = GetArticle (Result Http.Error String)
+    | Finished
 
 init : String -> ( Model, Cmd Msg )
 init url = 
-    ( Loading
+    ( Loading url
     , Http.get 
         { url = url
         , expect = Http.expectString GetArticle} )
@@ -37,7 +37,7 @@ init url =
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case (msg, model) of
-        (GetArticle result, _) ->   
+        (GetArticle result, Loading url) ->   
             case result of
                 Err e -> ( Failure e, Cmd.none )
 
@@ -46,7 +46,12 @@ update msg model =
                         { title = titleOf req "No Title"
                         , content = req
                         , parsed = Markdown.toHtml [class "article"] req
-                        , attributes = []}, Cmd.none )
+                        , attributes = 
+                            [ArticleAttr.Url url]}
+                    , Cmd.none )
+
+        (Finished, _) ->
+            ( model, Cmd.none)
 
         _ -> (Unknown, Cmd.none)
 
@@ -54,14 +59,10 @@ view : Model -> Html Msg
 view model =
     case model of
         Article article -> div [] 
-            [ text "parsed Markdown is: "
-            , article.parsed
-            , text "origin: "
-            , pre [] [ text article.content ]
-            ]
+            [ article.parsed ]
 
-        Loading -> text "now loading"
+        Loading url -> text <| "now loading from " ++ url
 
-        Failure err -> div [] [ text "Error Occured", text (Debug.toString err) ]
+        Failure err -> div [] [ text "Error Occured: ", text (Debug.toString err) ]
 
         Unknown -> div [] [ text "Unknown error" ]

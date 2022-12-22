@@ -5,5 +5,6 @@ module Article.Attribute exposing (..)
 type ArticleAttribute
     = Date
     | Theme
+    | Url String
 
     
