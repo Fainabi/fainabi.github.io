@@ -6211,11 +6211,10 @@ var $elm$url$Url$Parser$parse = F2(
 					url.fragment,
 					$elm$core$Basics$identity)));
 	});
-var $author$project$Route$Article = function (a) {
-	return {$: 'Article', a: a};
+var $author$project$Route$Blog = function (a) {
+	return {$: 'Blog', a: a};
 };
 var $author$project$Route$Home = {$: 'Home'};
-var $author$project$Route$PageArticle = {$: 'PageArticle'};
 var $elm$url$Url$Parser$Parser = function (a) {
 	return {$: 'Parser', a: a};
 };
@@ -6317,19 +6316,6 @@ var $elm$url$Url$Parser$slash = F2(
 					parseBefore(state));
 			});
 	});
-var $elm$url$Url$Parser$top = $elm$url$Url$Parser$Parser(
-	function (state) {
-		return _List_fromArray(
-			[state]);
-	});
-var $author$project$Article$Slug$Slug = function (a) {
-	return {$: 'Slug', a: a};
-};
-var $elm$core$Basics$composeR = F3(
-	function (f, g, x) {
-		return g(
-			f(x));
-	});
 var $elm$url$Url$Parser$custom = F2(
 	function (tipe, stringToSomething) {
 		return $elm$url$Url$Parser$Parser(
@@ -6363,25 +6349,97 @@ var $elm$url$Url$Parser$custom = F2(
 				}
 			});
 	});
-var $author$project$Article$Slug$urlParser = A2(
-	$elm$url$Url$Parser$custom,
-	'SLUG',
-	A2($elm$core$Basics$composeR, $author$project$Article$Slug$Slug, $elm$core$Maybe$Just));
+var $elm$url$Url$Parser$string = A2($elm$url$Url$Parser$custom, 'STRING', $elm$core$Maybe$Just);
+var $elm$url$Url$Parser$top = $elm$url$Url$Parser$Parser(
+	function (state) {
+		return _List_fromArray(
+			[state]);
+	});
 var $author$project$Route$routeParser = $elm$url$Url$Parser$oneOf(
 	_List_fromArray(
 		[
 			A2($elm$url$Url$Parser$map, $author$project$Route$Home, $elm$url$Url$Parser$top),
 			A2(
 			$elm$url$Url$Parser$map,
-			$author$project$Route$Article,
+			F5(
+				function (e1, e2, e3, e4, e5) {
+					return $author$project$Route$Blog(
+						_List_fromArray(
+							[e1, e2, e3, e4, e5]));
+				}),
 			A2(
 				$elm$url$Url$Parser$slash,
-				$elm$url$Url$Parser$s('articles'),
-				$author$project$Article$Slug$urlParser)),
+				$elm$url$Url$Parser$s('blog'),
+				A2(
+					$elm$url$Url$Parser$slash,
+					$elm$url$Url$Parser$string,
+					A2(
+						$elm$url$Url$Parser$slash,
+						$elm$url$Url$Parser$string,
+						A2(
+							$elm$url$Url$Parser$slash,
+							$elm$url$Url$Parser$string,
+							A2($elm$url$Url$Parser$slash, $elm$url$Url$Parser$string, $elm$url$Url$Parser$string)))))),
 			A2(
 			$elm$url$Url$Parser$map,
-			$author$project$Route$PageArticle,
-			$elm$url$Url$Parser$s('articl'))
+			F4(
+				function (e1, e2, e3, e4) {
+					return $author$project$Route$Blog(
+						_List_fromArray(
+							[e1, e2, e3, e4]));
+				}),
+			A2(
+				$elm$url$Url$Parser$slash,
+				$elm$url$Url$Parser$s('blog'),
+				A2(
+					$elm$url$Url$Parser$slash,
+					$elm$url$Url$Parser$string,
+					A2(
+						$elm$url$Url$Parser$slash,
+						$elm$url$Url$Parser$string,
+						A2($elm$url$Url$Parser$slash, $elm$url$Url$Parser$string, $elm$url$Url$Parser$string))))),
+			A2(
+			$elm$url$Url$Parser$map,
+			F3(
+				function (e1, e2, e3) {
+					return $author$project$Route$Blog(
+						_List_fromArray(
+							[e1, e2, e3]));
+				}),
+			A2(
+				$elm$url$Url$Parser$slash,
+				$elm$url$Url$Parser$s('blog'),
+				A2(
+					$elm$url$Url$Parser$slash,
+					$elm$url$Url$Parser$string,
+					A2($elm$url$Url$Parser$slash, $elm$url$Url$Parser$string, $elm$url$Url$Parser$string)))),
+			A2(
+			$elm$url$Url$Parser$map,
+			F2(
+				function (e1, e2) {
+					return $author$project$Route$Blog(
+						_List_fromArray(
+							[e1, e2]));
+				}),
+			A2(
+				$elm$url$Url$Parser$slash,
+				$elm$url$Url$Parser$s('blog'),
+				A2($elm$url$Url$Parser$slash, $elm$url$Url$Parser$string, $elm$url$Url$Parser$string))),
+			A2(
+			$elm$url$Url$Parser$map,
+			function (e) {
+				return $author$project$Route$Blog(
+					_List_fromArray(
+						[e]));
+			},
+			A2(
+				$elm$url$Url$Parser$slash,
+				$elm$url$Url$Parser$s('blog'),
+				$elm$url$Url$Parser$string)),
+			A2(
+			$elm$url$Url$Parser$map,
+			$author$project$Route$Blog(_List_Nil),
+			$elm$url$Url$Parser$s('blog'))
 		]));
 var $elm$core$Maybe$withDefault = F2(
 	function (_default, maybe) {
@@ -6403,21 +6461,20 @@ var $author$project$Route$fromUrl = function (url) {
 				path: A2($elm$core$Maybe$withDefault, '', url.fragment)
 			}));
 };
-var $elm$core$Debug$log = _Debug_log;
-var $author$project$Main$Article = function (a) {
-	return {$: 'Article', a: a};
+var $author$project$Main$Blog = function (a) {
+	return {$: 'Blog', a: a};
 };
-var $author$project$Main$GotArticle = function (a) {
-	return {$: 'GotArticle', a: a};
+var $author$project$Main$GotBlog = function (a) {
+	return {$: 'GotBlog', a: a};
 };
-var $author$project$Main$GotPageArticle = function (a) {
-	return {$: 'GotPageArticle', a: a};
+var $author$project$Main$GotPageBlog = function (a) {
+	return {$: 'GotPageBlog', a: a};
 };
 var $author$project$Main$NotFound = function (a) {
 	return {$: 'NotFound', a: a};
 };
-var $author$project$Main$PageArticle = function (a) {
-	return {$: 'PageArticle', a: a};
+var $author$project$Main$PageBlog = function (a) {
+	return {$: 'PageBlog', a: a};
 };
 var $elm$url$Url$Builder$toQueryPair = function (_v0) {
 	var key = _v0.a;
@@ -6438,20 +6495,12 @@ var $elm$url$Url$Builder$absolute = F2(
 	function (pathSegments, parameters) {
 		return '/' + (A2($elm$core$String$join, '/', pathSegments) + $elm$url$Url$Builder$toQuery(parameters));
 	});
-var $author$project$Article$getSession = function (model) {
+var $elm$core$String$endsWith = _String_endsWith;
+var $author$project$Blog$getSession = function (model) {
 	return model.session;
 };
-var $author$project$Page$Article$getSession = function (model) {
+var $author$project$Page$Blog$getSession = function (model) {
 	return model.session;
-};
-var $author$project$Underconstruction$getSession = function (model) {
-	if (model.$ === 'Plan') {
-		var s = model.a;
-		return s;
-	} else {
-		var s = model.c;
-		return s;
-	}
 };
 var $author$project$Main$getSession = function (model) {
 	switch (model.$) {
@@ -6461,30 +6510,25 @@ var $author$project$Main$getSession = function (model) {
 		case 'NotFound':
 			var s = model.a;
 			return s;
-		case 'Article':
-			var article = model.a;
-			return $author$project$Article$getSession(article);
-		case 'Underconstruction':
-			var ud = model.a;
-			return $author$project$Underconstruction$getSession(ud);
+		case 'Blog':
+			var blog = model.a;
+			return $author$project$Blog$getSession(blog);
 		default:
 			var page = model.a;
-			return $author$project$Page$Article$getSession(page);
+			return $author$project$Page$Blog$getSession(page);
 	}
 };
-var $author$project$Article$GotBody = function (a) {
+var $author$project$Blog$GotBody = function (a) {
 	return {$: 'GotBody', a: a};
 };
-var $author$project$Article$Model = F4(
+var $author$project$Blog$Model = F4(
 	function (body, sidenav, session, url) {
 		return {body: body, session: session, sidenav: sidenav, url: url};
 	});
-var $author$project$Article$Body$GetArticle = function (a) {
+var $author$project$Blog$Body$GetArticle = function (a) {
 	return {$: 'GetArticle', a: a};
 };
-var $author$project$Article$Body$Loading = function (a) {
-	return {$: 'Loading', a: a};
-};
+var $author$project$Blog$Body$Loading = {$: 'Loading'};
 var $elm$http$Http$BadStatus_ = F2(
 	function (a, b) {
 		return {$: 'BadStatus_', a: a, b: b};
@@ -6512,6 +6556,11 @@ var $elm$core$Maybe$isJust = function (maybe) {
 	}
 };
 var $elm$core$Platform$sendToSelf = _Platform_sendToSelf;
+var $elm$core$Basics$composeR = F3(
+	function (f, g, x) {
+		return g(
+			f(x));
+	});
 var $elm$http$Http$expectStringResponse = F2(
 	function (toMsg, toResult) {
 		return A3(
@@ -6744,16 +6793,16 @@ var $elm$http$Http$get = function (r) {
 	return $elm$http$Http$request(
 		{body: $elm$http$Http$emptyBody, expect: r.expect, headers: _List_Nil, method: 'GET', timeout: $elm$core$Maybe$Nothing, tracker: $elm$core$Maybe$Nothing, url: r.url});
 };
-var $author$project$Article$Body$init = function (url) {
+var $author$project$Blog$Body$init = function (url) {
 	return _Utils_Tuple2(
-		$author$project$Article$Body$Loading(url),
+		$author$project$Blog$Body$Loading,
 		$elm$http$Http$get(
 			{
-				expect: $elm$http$Http$expectString($author$project$Article$Body$GetArticle),
+				expect: $elm$http$Http$expectString($author$project$Blog$Body$GetArticle),
 				url: url
 			}));
 };
-var $author$project$Article$Section$Section = F2(
+var $author$project$Blog$Section$Section = F2(
 	function (h, name) {
 		return {h: h, name: name};
 	});
@@ -6769,7 +6818,7 @@ var $elm$core$List$filter = F2(
 			list);
 	});
 var $elm$core$String$lines = _String_lines;
-var $author$project$Article$Section$numberOfSharp = function (s) {
+var $author$project$Blog$Section$numberOfSharp = function (s) {
 	if (!s.b) {
 		return 0;
 	} else {
@@ -6777,7 +6826,7 @@ var $author$project$Article$Section$numberOfSharp = function (s) {
 		var cs = s.b;
 		return _Utils_eq(
 			c,
-			_Utils_chr('#')) ? (1 + $author$project$Article$Section$numberOfSharp(cs)) : 0;
+			_Utils_chr('#')) ? (1 + $author$project$Blog$Section$numberOfSharp(cs)) : 0;
 	}
 };
 var $elm$core$String$foldr = _String_foldr;
@@ -6785,7 +6834,7 @@ var $elm$core$String$toList = function (string) {
 	return A3($elm$core$String$foldr, $elm$core$List$cons, _List_Nil, string);
 };
 var $elm$core$String$trim = _String_trim;
-var $author$project$Article$Section$extractSections = function (article) {
+var $author$project$Blog$Section$extractSections = function (article) {
 	var rows = $elm$core$String$lines(article);
 	var chapters = A2(
 		$elm$core$List$filter,
@@ -6794,19 +6843,19 @@ var $author$project$Article$Section$extractSections = function (article) {
 	return A2(
 		$elm$core$List$map,
 		function (x) {
-			var len = $author$project$Article$Section$numberOfSharp(
+			var len = $author$project$Blog$Section$numberOfSharp(
 				$elm$core$String$toList(x));
 			var restTitle = $elm$core$String$trim(
 				A2($elm$core$String$dropLeft, len, x));
-			return A2($author$project$Article$Section$Section, len, restTitle);
+			return A2($author$project$Blog$Section$Section, len, restTitle);
 		},
 		chapters);
 };
-var $author$project$Article$SideNav$FoldOnceSection = F2(
+var $author$project$Blog$SideNav$FoldOnceSection = F2(
 	function (sec, subsec) {
 		return {sec: sec, subsec: subsec};
 	});
-var $author$project$Article$SideNav$foldOnce = function (ls) {
+var $author$project$Blog$SideNav$foldOnce = function (ls) {
 	var grouped = $elm$core$List$reverse(
 		A3(
 			$elm$core$List$foldl,
@@ -6846,50 +6895,50 @@ var $author$project$Article$SideNav$foldOnce = function (ls) {
 		function (_v0) {
 			var rt = _v0.a;
 			var sub = _v0.b;
-			return A2($author$project$Article$SideNav$FoldOnceSection, rt, sub);
+			return A2($author$project$Blog$SideNav$FoldOnceSection, rt, sub);
 		},
 		grouped);
 };
-var $author$project$Article$SideNav$validSection = $elm$core$List$filter(
+var $author$project$Blog$SideNav$validSection = $elm$core$List$filter(
 	function (sec) {
 		return (sec.h <= 3) && (sec.h > 1);
 	});
-var $author$project$Article$SideNav$init = function (body) {
+var $author$project$Blog$SideNav$init = function (body) {
 	if (body.$ === 'Article') {
 		var article = body.a;
-		var sections = $author$project$Article$SideNav$validSection(
-			$author$project$Article$Section$extractSections(article.content));
+		var sections = $author$project$Blog$SideNav$validSection(
+			$author$project$Blog$Section$extractSections(article.content));
 		return {
 			cursor: 0,
-			sections: $author$project$Article$SideNav$foldOnce(sections)
+			sections: $author$project$Blog$SideNav$foldOnce(sections)
 		};
 	} else {
 		return {cursor: 0, sections: _List_Nil};
 	}
 };
 var $elm$core$Platform$Cmd$map = _Platform_map;
-var $author$project$Article$init = F2(
+var $author$project$Blog$init = F2(
 	function (session, url) {
-		var _v0 = $author$project$Article$Body$init(url);
+		var _v0 = $author$project$Blog$Body$init(url);
 		var body = _v0.a;
 		var bodyMsg = _v0.b;
 		return _Utils_Tuple2(
 			A4(
-				$author$project$Article$Model,
+				$author$project$Blog$Model,
 				body,
-				$author$project$Article$SideNav$init(body),
+				$author$project$Blog$SideNav$init(body),
 				session,
 				url),
-			A2($elm$core$Platform$Cmd$map, $author$project$Article$GotBody, bodyMsg));
+			A2($elm$core$Platform$Cmd$map, $author$project$Blog$GotBody, bodyMsg));
 	});
-var $author$project$Page$Article$GotIdx = function (a) {
+var $author$project$Page$Blog$GotIdx = function (a) {
 	return {$: 'GotIdx', a: a};
 };
-var $author$project$Page$Article$Model = F3(
+var $author$project$Page$Blog$Model = F3(
 	function (session, topics, path) {
 		return {path: path, session: session, topics: topics};
 	});
-var $author$project$Page$Article$articleIdx = '/articles/index.json';
+var $author$project$Page$Blog$articleIdx = '/blog/index.json';
 var $elm$json$Json$Decode$decodeString = _Json_runOnString;
 var $elm$http$Http$expectJson = F2(
 	function (toMsg, decoder) {
@@ -6904,10 +6953,10 @@ var $elm$http$Http$expectJson = F2(
 						A2($elm$json$Json$Decode$decodeString, decoder, string));
 				}));
 	});
-var $author$project$Page$Article$SubTopic = function (a) {
+var $author$project$Page$Blog$SubTopic = function (a) {
 	return {$: 'SubTopic', a: a};
 };
-var $author$project$Page$Article$Topic = F2(
+var $author$project$Page$Blog$Topic = F2(
 	function (a, b) {
 		return {$: 'Topic', a: a, b: b};
 	});
@@ -6921,45 +6970,56 @@ var $elm$json$Json$Decode$lazy = function (thunk) {
 };
 var $elm$json$Json$Decode$list = _Json_decodeList;
 var $elm$json$Json$Decode$string = _Json_decodeString;
-function $author$project$Page$Article$cyclic$idxDecoder() {
+function $author$project$Page$Blog$cyclic$idxDecoder() {
 	return A3(
 		$elm$json$Json$Decode$map2,
-		$author$project$Page$Article$Topic,
+		$author$project$Page$Blog$Topic,
 		A2($elm$json$Json$Decode$field, 'name', $elm$json$Json$Decode$string),
 		A2(
 			$elm$json$Json$Decode$field,
 			'dir',
 			A2(
 				$elm$json$Json$Decode$map,
-				$author$project$Page$Article$SubTopic,
+				$author$project$Page$Blog$SubTopic,
 				$elm$json$Json$Decode$list(
 					$elm$json$Json$Decode$lazy(
 						function (_v0) {
-							return $author$project$Page$Article$cyclic$idxDecoder();
+							return $author$project$Page$Blog$cyclic$idxDecoder();
 						})))));
 }
 try {
-	var $author$project$Page$Article$idxDecoder = $author$project$Page$Article$cyclic$idxDecoder();
-	$author$project$Page$Article$cyclic$idxDecoder = function () {
-		return $author$project$Page$Article$idxDecoder;
+	var $author$project$Page$Blog$idxDecoder = $author$project$Page$Blog$cyclic$idxDecoder();
+	$author$project$Page$Blog$cyclic$idxDecoder = function () {
+		return $author$project$Page$Blog$idxDecoder;
 	};
 } catch ($) {
-	throw 'Some top-level definitions from `Page.Article` are causing infinite recursion:\n\n  ┌─────┐\n  │    idxDecoder\n  └─────┘\n\nThese errors are very tricky, so read https://elm-lang.org/0.19.1/bad-recursion to learn how to fix it!';}
-var $author$project$Page$Article$init = function (s) {
-	return _Utils_Tuple2(
-		A3($author$project$Page$Article$Model, s, _List_Nil, _List_Nil),
-		$elm$http$Http$get(
-			{
-				expect: A2($elm$http$Http$expectJson, $author$project$Page$Article$GotIdx, $author$project$Page$Article$idxDecoder),
-				url: $author$project$Page$Article$articleIdx
-			}));
+	throw 'Some top-level definitions from `Page.Blog` are causing infinite recursion:\n\n  ┌─────┐\n  │    idxDecoder\n  └─────┘\n\nThese errors are very tricky, so read https://elm-lang.org/0.19.1/bad-recursion to learn how to fix it!';}
+var $elm$core$Debug$log = _Debug_log;
+var $author$project$Page$Blog$init = function (s) {
+	return A2(
+		$elm$core$Debug$log,
+		'init',
+		_Utils_Tuple2(
+			A3($author$project$Page$Blog$Model, s, _List_Nil, _List_Nil),
+			$elm$http$Http$get(
+				{
+					expect: A2($elm$http$Http$expectJson, $author$project$Page$Blog$GotIdx, $author$project$Page$Blog$idxDecoder),
+					url: $author$project$Page$Blog$articleIdx
+				})));
 };
+var $author$project$Page$Blog$initWithPath = F2(
+	function (path, s) {
+		var _v0 = $author$project$Page$Blog$init(s);
+		var model = _v0.a;
+		var cmd = _v0.b;
+		return _Utils_Tuple2(
+			_Utils_update(
+				model,
+				{path: path}),
+			cmd);
+	});
 var $elm$core$Platform$Cmd$batch = _Platform_batch;
 var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
-var $author$project$Article$Slug$toUrl = function (slug) {
-	var url = slug.a;
-	return url;
-};
 var $author$project$Main$routeTo = F2(
 	function (maybeRoute, model) {
 		var session = $author$project$Main$getSession(model);
@@ -6968,61 +7028,48 @@ var $author$project$Main$routeTo = F2(
 				$author$project$Main$NotFound(session),
 				$elm$core$Platform$Cmd$none);
 		} else {
-			switch (maybeRoute.a.$) {
-				case 'Home':
-					var _v1 = maybeRoute.a;
-					return _Utils_Tuple2(
-						$author$project$Main$Home(session),
-						$elm$core$Platform$Cmd$none);
-				case 'Article':
-					var s = maybeRoute.a.a;
-					var _v2 = A2(
-						$author$project$Article$init,
-						session,
-						A2(
-							$elm$url$Url$Builder$absolute,
-							_List_fromArray(
-								[
-									'articles',
-									$author$project$Article$Slug$toUrl(s)
-								]),
-							_List_Nil));
+			if (maybeRoute.a.$ === 'Home') {
+				var _v1 = maybeRoute.a;
+				return _Utils_Tuple2(
+					$author$project$Main$Home(session),
+					$elm$core$Platform$Cmd$none);
+			} else {
+				var blog = maybeRoute.a.a;
+				var url = A2(
+					$elm$core$Debug$log,
+					'url is',
+					A2(
+						$elm$url$Url$Builder$absolute,
+						A2($elm$core$List$cons, 'blog', blog),
+						_List_Nil));
+				if (A2($elm$core$String$endsWith, '.md', url)) {
+					var _v2 = A2($author$project$Blog$init, session, url);
 					var newModel = _v2.a;
 					var msg = _v2.b;
 					return _Utils_Tuple2(
-						$author$project$Main$Article(newModel),
-						A2($elm$core$Platform$Cmd$map, $author$project$Main$GotArticle, msg));
-				default:
-					var _v3 = maybeRoute.a;
-					var _v4 = $author$project$Page$Article$init(
-						$author$project$Main$getSession(model));
-					var newModel = _v4.a;
-					var msg = _v4.b;
+						$author$project$Main$Blog(newModel),
+						A2($elm$core$Platform$Cmd$map, $author$project$Main$GotBlog, msg));
+				} else {
+					var _v3 = A2($author$project$Page$Blog$initWithPath, blog, session);
+					var newModel = _v3.a;
+					var msg = _v3.b;
 					return _Utils_Tuple2(
-						$author$project$Main$PageArticle(newModel),
-						A2($elm$core$Platform$Cmd$map, $author$project$Main$GotPageArticle, msg));
+						$author$project$Main$PageBlog(newModel),
+						A2($elm$core$Platform$Cmd$map, $author$project$Main$GotPageBlog, msg));
+				}
 			}
 		}
 	});
 var $author$project$Main$init = F3(
 	function (_v0, url, key) {
 		return A2(
-			$elm$core$Debug$log,
-			'route',
-			A2(
-				$author$project$Main$routeTo,
-				$author$project$Route$fromUrl(url),
-				$author$project$Main$Home(
-					$author$project$Session$Session(key))));
+			$author$project$Main$routeTo,
+			$author$project$Route$fromUrl(url),
+			$author$project$Main$Home(
+				$author$project$Session$Session(key)));
 	});
 var $elm$core$Platform$Sub$batch = _Platform_batch;
 var $elm$core$Platform$Sub$none = $elm$core$Platform$Sub$batch(_List_Nil);
-var $author$project$Main$GotConstruction = function (a) {
-	return {$: 'GotConstruction', a: a};
-};
-var $author$project$Main$Underconstruction = function (a) {
-	return {$: 'Underconstruction', a: a};
-};
 var $elm$browser$Browser$Navigation$load = _Browser_load;
 var $author$project$Session$navKey = function (session) {
 	var key = session.a;
@@ -7073,23 +7120,19 @@ var $elm$url$Url$toString = function (url) {
 					_Utils_ap(http, url.host)),
 				url.path)));
 };
-var $author$project$Article$GotSideNav = function (a) {
+var $author$project$Blog$GotSideNav = function (a) {
 	return {$: 'GotSideNav', a: a};
 };
-var $author$project$Article$SideNav$Reload = function (a) {
+var $author$project$Blog$SideNav$Reload = function (a) {
 	return {$: 'Reload', a: a};
 };
-var $elm$core$Debug$toString = _Debug_toString;
-var $author$project$Article$Body$Article = function (a) {
+var $author$project$Blog$Body$Article = function (a) {
 	return {$: 'Article', a: a};
 };
-var $author$project$Article$Body$Failure = function (a) {
+var $author$project$Blog$Body$Failure = function (a) {
 	return {$: 'Failure', a: a};
 };
-var $author$project$Article$Body$Unknown = {$: 'Unknown'};
-var $author$project$Article$Attribute$Url = function (a) {
-	return {$: 'Url', a: a};
-};
+var $author$project$Blog$Body$Unknown = {$: 'Unknown'};
 var $elm$json$Json$Encode$string = _Json_wrap;
 var $elm$html$Html$Attributes$stringProperty = F2(
 	function (key, string) {
@@ -7108,7 +7151,14 @@ var $elm$core$List$head = function (list) {
 		return $elm$core$Maybe$Nothing;
 	}
 };
-var $author$project$Article$Utils$titleOf = F2(
+var $elm$core$String$replace = F3(
+	function (before, after, string) {
+		return A2(
+			$elm$core$String$join,
+			after,
+			A2($elm$core$String$split, before, string));
+	});
+var $author$project$Blog$Utils$titleOf = F2(
 	function (str, defaultTitle) {
 		var maybeTitle = $elm$core$List$head(
 			A2(
@@ -7117,7 +7167,8 @@ var $author$project$Article$Utils$titleOf = F2(
 				$elm$core$String$lines(str)));
 		if (maybeTitle.$ === 'Just') {
 			var t = maybeTitle.a;
-			return t;
+			return $elm$core$String$trim(
+				A3($elm$core$String$replace, '#', '', t));
 		} else {
 			return defaultTitle;
 		}
@@ -7131,27 +7182,24 @@ var $elm_explorations$markdown$Markdown$defaultOptions = {
 };
 var $elm_explorations$markdown$Markdown$toHtmlWith = _Markdown_toHtml;
 var $elm_explorations$markdown$Markdown$toHtml = $elm_explorations$markdown$Markdown$toHtmlWith($elm_explorations$markdown$Markdown$defaultOptions);
-var $author$project$Article$Body$update = F2(
+var $author$project$Blog$Body$update = F2(
 	function (msg, model) {
 		var _v0 = _Utils_Tuple2(msg, model);
 		if (_v0.a.$ === 'GetArticle') {
 			if (_v0.b.$ === 'Loading') {
 				var result = _v0.a.a;
-				var url = _v0.b.a;
+				var _v1 = _v0.b;
 				if (result.$ === 'Err') {
 					var e = result.a;
 					return _Utils_Tuple2(
-						$author$project$Article$Body$Failure(e),
+						$author$project$Blog$Body$Failure(e),
 						$elm$core$Platform$Cmd$none);
 				} else {
 					var req = result.a;
 					return _Utils_Tuple2(
-						$author$project$Article$Body$Article(
+						$author$project$Blog$Body$Article(
 							{
-								attributes: _List_fromArray(
-									[
-										$author$project$Article$Attribute$Url(url)
-									]),
+								attributes: _List_Nil,
 								content: req,
 								parsed: A2(
 									$elm_explorations$markdown$Markdown$toHtml,
@@ -7160,19 +7208,19 @@ var $author$project$Article$Body$update = F2(
 											$elm$html$Html$Attributes$class('article')
 										]),
 									req),
-								title: A2($author$project$Article$Utils$titleOf, req, 'No Title')
+								title: A2($author$project$Blog$Utils$titleOf, req, 'No Title')
 							}),
 						$elm$core$Platform$Cmd$none);
 				}
 			} else {
-				return _Utils_Tuple2($author$project$Article$Body$Unknown, $elm$core$Platform$Cmd$none);
+				return _Utils_Tuple2($author$project$Blog$Body$Unknown, $elm$core$Platform$Cmd$none);
 			}
 		} else {
-			var _v2 = _v0.a;
+			var _v3 = _v0.a;
 			return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 		}
 	});
-var $author$project$Article$SideNav$Completed = {$: 'Completed'};
+var $author$project$Blog$SideNav$Completed = {$: 'Completed'};
 var $elm$core$Basics$composeL = F3(
 	function (g, f, x) {
 		return g(
@@ -7199,7 +7247,7 @@ var $elm$core$Task$attempt = F2(
 	});
 var $elm$browser$Browser$Dom$getElement = _Browser_getElement;
 var $elm$browser$Browser$Dom$setViewport = _Browser_setViewport;
-var $author$project$Article$SideNav$update = F2(
+var $author$project$Blog$SideNav$update = F2(
 	function (msg, model) {
 		switch (msg.$) {
 			case 'MoveTo':
@@ -7212,7 +7260,7 @@ var $author$project$Article$SideNav$update = F2(
 			case 'Reload':
 				var m = msg.a;
 				return _Utils_Tuple2(
-					$author$project$Article$SideNav$init(m),
+					$author$project$Blog$SideNav$init(m),
 					$elm$core$Platform$Cmd$none);
 			case 'ToSection':
 				var name = msg.a;
@@ -7221,7 +7269,7 @@ var $author$project$Article$SideNav$update = F2(
 					A2(
 						$elm$core$Task$attempt,
 						function (_v1) {
-							return $author$project$Article$SideNav$Completed;
+							return $author$project$Blog$SideNav$Completed;
 						},
 						A2(
 							$elm$core$Task$andThen,
@@ -7233,18 +7281,18 @@ var $author$project$Article$SideNav$update = F2(
 				return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 		}
 	});
-var $author$project$Article$update = F2(
+var $author$project$Blog$update = F2(
 	function (msg, model) {
 		switch (msg.$) {
 			case 'GotBody':
 				var bodyMsg = msg.a;
 				if (bodyMsg.$ === 'GetArticle') {
-					var _v2 = A2($author$project$Article$Body$update, bodyMsg, model.body);
+					var _v2 = A2($author$project$Blog$Body$update, bodyMsg, model.body);
 					var newBody = _v2.a;
 					var newMsg = _v2.b;
 					var _v3 = A2(
-						$author$project$Article$SideNav$update,
-						$author$project$Article$SideNav$Reload(newBody),
+						$author$project$Blog$SideNav$update,
+						$author$project$Blog$SideNav$Reload(newBody),
 						model.sidenav);
 					var newNav = _v3.a;
 					var newNavMsg = _v3.b;
@@ -7255,38 +7303,34 @@ var $author$project$Article$update = F2(
 						$elm$core$Platform$Cmd$batch(
 							_List_fromArray(
 								[
-									A2($elm$core$Platform$Cmd$map, $author$project$Article$GotBody, newMsg),
-									A2($elm$core$Platform$Cmd$map, $author$project$Article$GotSideNav, newNavMsg)
+									A2($elm$core$Platform$Cmd$map, $author$project$Blog$GotBody, newMsg),
+									A2($elm$core$Platform$Cmd$map, $author$project$Blog$GotSideNav, newNavMsg)
 								])));
 				} else {
-					var _v4 = A2($author$project$Article$Body$update, bodyMsg, model.body);
+					var _v4 = A2($author$project$Blog$Body$update, bodyMsg, model.body);
 					var newBody = _v4.a;
 					var newMsg = _v4.b;
 					return _Utils_Tuple2(
 						model,
-						A2($elm$core$Platform$Cmd$map, $author$project$Article$GotBody, newMsg));
+						A2($elm$core$Platform$Cmd$map, $author$project$Blog$GotBody, newMsg));
 				}
 			case 'GotSideNav':
 				var navMsg = msg.a;
-				var _v5 = A2($author$project$Article$SideNav$update, navMsg, model.sidenav);
+				var _v5 = A2($author$project$Blog$SideNav$update, navMsg, model.sidenav);
 				var newMsg = _v5.b;
 				return _Utils_Tuple2(
 					model,
-					A2($elm$core$Platform$Cmd$map, $author$project$Article$GotSideNav, newMsg));
+					A2($elm$core$Platform$Cmd$map, $author$project$Blog$GotSideNav, newMsg));
 			default:
-				return _Utils_Tuple2(
-					model,
-					A2(
-						$elm$core$Debug$log,
-						'::' + $elm$core$Debug$toString(msg),
-						$elm$core$Platform$Cmd$none));
+				return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 		}
 	});
-var $author$project$Page$Article$subTopicOf = function (topic) {
+var $author$project$Page$Blog$subTopicOf = function (topic) {
 	var subTopic = topic.b.a;
 	return subTopic;
 };
-var $author$project$Page$Article$update = F2(
+var $elm$core$Debug$toString = _Debug_toString;
+var $author$project$Page$Blog$update = F2(
 	function (msg, model) {
 		switch (msg.$) {
 			case 'Finished':
@@ -7296,14 +7340,11 @@ var $author$project$Page$Article$update = F2(
 				if (req.$ === 'Ok') {
 					var topic = req.a;
 					return _Utils_Tuple2(
-						A2(
-							$elm$core$Debug$log,
-							'model',
-							_Utils_update(
-								model,
-								{
-									topics: $author$project$Page$Article$subTopicOf(topic)
-								})),
+						_Utils_update(
+							model,
+							{
+								topics: $author$project$Page$Blog$subTopicOf(topic)
+							}),
 						$elm$core$Platform$Cmd$none);
 				} else {
 					var err = req.a;
@@ -7314,223 +7355,84 @@ var $author$project$Page$Article$update = F2(
 							$elm$core$Debug$toString(err),
 							$elm$core$Platform$Cmd$none));
 				}
-			case 'ChangePath':
+			default:
 				var path = msg.a;
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
 						{path: path}),
-					$elm$core$Platform$Cmd$none);
-			default:
-				return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
-		}
-	});
-var $author$project$Underconstruction$GotHelper = function (a) {
-	return {$: 'GotHelper', a: a};
-};
-var $author$project$Underconstruction$PlanWithTime = F3(
-	function (a, b, c) {
-		return {$: 'PlanWithTime', a: a, b: b, c: c};
-	});
-var $author$project$Helper$Empty = {$: 'Empty'};
-var $author$project$Helper$init = function (_v0) {
-	return _Utils_Tuple2($author$project$Helper$Empty, $elm$core$Platform$Cmd$none);
-};
-var $author$project$Helper$Clicked = {$: 'Clicked'};
-var $author$project$Helper$GotTestArticle = function (a) {
-	return {$: 'GotTestArticle', a: a};
-};
-var $author$project$Helper$ParsedOver = F2(
-	function (a, b) {
-		return {$: 'ParsedOver', a: a, b: b};
-	});
-var $author$project$Helper$TestArticle = F2(
-	function (a, b) {
-		return {$: 'TestArticle', a: a, b: b};
-	});
-var $author$project$Helper$update = F2(
-	function (msg, model) {
-		var _v0 = _Utils_Tuple2(msg, model);
-		_v0$3:
-		while (true) {
-			switch (_v0.a.$) {
-				case 'GetTestArticle':
-					var _v1 = _v0.a;
-					var _v2 = $author$project$Article$Body$init(
+					A2(
+						$elm$browser$Browser$Navigation$pushUrl,
+						$author$project$Session$navKey(
+							$author$project$Page$Blog$getSession(model)),
 						A2(
 							$elm$url$Url$Builder$absolute,
-							_List_fromArray(
-								['articles', 'test.md']),
-							_List_Nil));
-					var m = _v2.a;
-					var msg_a = _v2.b;
-					return _Utils_Tuple2(
-						A2(
-							$author$project$Helper$TestArticle,
-							m,
-							$author$project$Article$SideNav$init(m)),
-						A2($elm$core$Platform$Cmd$map, $author$project$Helper$GotTestArticle, msg_a));
-				case 'GotTestArticle':
-					if (_v0.b.$ === 'TestArticle') {
-						var aMsg = _v0.a.a;
-						var _v3 = _v0.b;
-						var aModel = _v3.a;
-						var sModel = _v3.b;
-						var _v4 = A2($author$project$Article$Body$update, aMsg, aModel);
-						var m = _v4.a;
-						var msg_a = _v4.b;
-						var _v5 = A2(
-							$author$project$Article$SideNav$update,
-							$author$project$Article$SideNav$Reload(m),
-							sModel);
-						var newS = _v5.a;
-						return _Utils_Tuple2(
-							A2($author$project$Helper$ParsedOver, m, newS),
-							$elm$core$Platform$Cmd$none);
-					} else {
-						break _v0$3;
-					}
-				default:
-					if (_v0.b.$ === 'ParsedOver') {
-						var sMsg = _v0.a.a;
-						var _v6 = _v0.b;
-						var aModel = _v6.a;
-						var sModel = _v6.b;
-						var _v7 = A2($author$project$Article$SideNav$update, sMsg, sModel);
-						var m = _v7.a;
-						return _Utils_Tuple2(
-							A2($author$project$Helper$ParsedOver, aModel, m),
-							$elm$core$Platform$Cmd$none);
-					} else {
-						break _v0$3;
-					}
-			}
-		}
-		return _Utils_Tuple2($author$project$Helper$Clicked, $elm$core$Platform$Cmd$none);
-	});
-var $author$project$Underconstruction$update = F2(
-	function (msg, model) {
-		var _v0 = _Utils_Tuple2(msg, model);
-		if (_v0.a.$ === 'GetTime') {
-			var time = _v0.a.a;
-			var _v1 = $author$project$Helper$init(_Utils_Tuple0);
-			var hMdl = _v1.a;
-			var hMsg = _v1.b;
-			return _Utils_Tuple2(
-				A3(
-					$author$project$Underconstruction$PlanWithTime,
-					time,
-					hMdl,
-					$author$project$Underconstruction$getSession(model)),
-				A2($elm$core$Platform$Cmd$map, $author$project$Underconstruction$GotHelper, hMsg));
-		} else {
-			if (_v0.b.$ === 'PlanWithTime') {
-				var helperMsg = _v0.a.a;
-				var _v2 = _v0.b;
-				var time = _v2.a;
-				var helper = _v2.b;
-				var s = _v2.c;
-				var _v3 = A2($author$project$Helper$update, helperMsg, helper);
-				var newHelper = _v3.a;
-				var newMsg = _v3.b;
-				return _Utils_Tuple2(
-					A3($author$project$Underconstruction$PlanWithTime, time, newHelper, s),
-					A2($elm$core$Platform$Cmd$map, $author$project$Underconstruction$GotHelper, newMsg));
-			} else {
-				return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
-			}
+							A2($elm$core$List$cons, '#/blog', path),
+							_List_Nil)));
 		}
 	});
 var $author$project$Main$update = F2(
 	function (msg, model) {
 		var _v0 = _Utils_Tuple2(msg, model);
-		_v0$1:
+		_v0$4:
 		while (true) {
-			_v0$6:
-			while (true) {
-				switch (_v0.a.$) {
-					case 'GotConstruction':
-						switch (_v0.b.$) {
-							case 'Underconstruction':
-								var gcMsg = _v0.a.a;
-								var gcModel = _v0.b.a;
-								var _v1 = A2($author$project$Underconstruction$update, gcMsg, gcModel);
-								var nm = _v1.a;
-								var nmsg = _v1.b;
-								return _Utils_Tuple2(
-									$author$project$Main$Underconstruction(nm),
-									A2($elm$core$Platform$Cmd$map, $author$project$Main$GotConstruction, nmsg));
-							case 'Home':
-								break _v0$1;
-							default:
-								break _v0$6;
-						}
-					case 'UrlChanged':
-						if (_v0.b.$ === 'Home') {
-							break _v0$1;
-						} else {
-							var url = _v0.a.a;
-							return A2(
-								$author$project$Main$routeTo,
-								$author$project$Route$fromUrl(url),
-								model);
-						}
-					case 'LinkClicked':
-						if (_v0.b.$ === 'Home') {
-							break _v0$1;
-						} else {
-							var req = _v0.a.a;
-							if (req.$ === 'Internal') {
-								var url = req.a;
-								return _Utils_Tuple2(
-									model,
-									A2(
-										$elm$browser$Browser$Navigation$pushUrl,
-										$author$project$Session$navKey(
-											$author$project$Main$getSession(model)),
-										$elm$url$Url$toString(url)));
-							} else {
-								var href = req.a;
-								return _Utils_Tuple2(
-									model,
-									$elm$browser$Browser$Navigation$load(href));
-							}
-						}
-					case 'GotArticle':
-						switch (_v0.b.$) {
-							case 'Home':
-								break _v0$1;
-							case 'Article':
-								var aMsg = _v0.a.a;
-								var aModel = _v0.b.a;
-								var _v3 = A2($author$project$Article$update, aMsg, aModel);
-								var newModel = _v3.a;
-								var newMsg = _v3.b;
-								return _Utils_Tuple2(
-									$author$project$Main$Article(newModel),
-									A2($elm$core$Platform$Cmd$map, $author$project$Main$GotArticle, newMsg));
-							default:
-								break _v0$6;
-						}
-					default:
-						switch (_v0.b.$) {
-							case 'Home':
-								break _v0$1;
-							case 'PageArticle':
-								var pMsg = _v0.a.a;
-								var pModel = _v0.b.a;
-								var _v4 = A2($author$project$Page$Article$update, pMsg, pModel);
-								var newModel = _v4.a;
-								var newMsg = _v4.b;
-								return _Utils_Tuple2(
-									$author$project$Main$PageArticle(newModel),
-									A2($elm$core$Platform$Cmd$map, $author$project$Main$GotPageArticle, newMsg));
-							default:
-								break _v0$6;
-						}
-				}
+			switch (_v0.a.$) {
+				case 'UrlChanged':
+					var url = _v0.a.a;
+					return A2(
+						$author$project$Main$routeTo,
+						$author$project$Route$fromUrl(url),
+						model);
+				case 'LinkClicked':
+					var req = _v0.a.a;
+					if (req.$ === 'Internal') {
+						var url = req.a;
+						return A2(
+							$elm$core$Debug$log,
+							'internal',
+							_Utils_Tuple2(
+								model,
+								A2(
+									$elm$browser$Browser$Navigation$pushUrl,
+									$author$project$Session$navKey(
+										$author$project$Main$getSession(model)),
+									$elm$url$Url$toString(url))));
+					} else {
+						var href = req.a;
+						return A2(
+							$elm$core$Debug$log,
+							'external',
+							_Utils_Tuple2(
+								model,
+								$elm$browser$Browser$Navigation$load(href)));
+					}
+				case 'GotBlog':
+					if (_v0.b.$ === 'Blog') {
+						var aMsg = _v0.a.a;
+						var aModel = _v0.b.a;
+						var _v2 = A2($author$project$Blog$update, aMsg, aModel);
+						var newModel = _v2.a;
+						var newMsg = _v2.b;
+						return _Utils_Tuple2(
+							$author$project$Main$Blog(newModel),
+							A2($elm$core$Platform$Cmd$map, $author$project$Main$GotBlog, newMsg));
+					} else {
+						break _v0$4;
+					}
+				default:
+					if (_v0.b.$ === 'PageBlog') {
+						var pMsg = _v0.a.a;
+						var pModel = _v0.b.a;
+						var _v3 = A2($author$project$Page$Blog$update, pMsg, pModel);
+						var newModel = _v3.a;
+						var newMsg = _v3.b;
+						return _Utils_Tuple2(
+							$author$project$Main$PageBlog(newModel),
+							A2($elm$core$Platform$Cmd$map, $author$project$Main$GotPageBlog, newMsg));
+					} else {
+						break _v0$4;
+					}
 			}
-			return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 		}
 		return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 	});
@@ -7538,10 +7440,19 @@ var $elm$virtual_dom$VirtualDom$map = _VirtualDom_map;
 var $elm$html$Html$map = $elm$virtual_dom$VirtualDom$map;
 var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
 var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
+var $author$project$Blog$titleOf = function (model) {
+	var _v0 = model.body;
+	if (_v0.$ === 'Article') {
+		var body = _v0.a;
+		return $elm$core$Maybe$Just(body.title);
+	} else {
+		return $elm$core$Maybe$Nothing;
+	}
+};
 var $elm$html$Html$article = _VirtualDom_node('article');
 var $elm$html$Html$aside = _VirtualDom_node('aside');
 var $elm$html$Html$div = _VirtualDom_node('div');
-var $author$project$Article$Body$view = function (model) {
+var $author$project$Blog$Body$view = function (model) {
 	switch (model.$) {
 		case 'Article':
 			var article = model.a;
@@ -7551,8 +7462,7 @@ var $author$project$Article$Body$view = function (model) {
 				_List_fromArray(
 					[article.parsed]));
 		case 'Loading':
-			var url = model.a;
-			return $elm$html$Html$text('now loading from ' + url);
+			return A2($elm$html$Html$div, _List_Nil, _List_Nil);
 		case 'Failure':
 			var err = model.a;
 			return A2(
@@ -7580,7 +7490,7 @@ var $elm$core$Tuple$pair = F2(
 	function (a, b) {
 		return _Utils_Tuple2(a, b);
 	});
-var $author$project$Article$SideNav$ToSection = function (a) {
+var $author$project$Blog$SideNav$ToSection = function (a) {
 	return {$: 'ToSection', a: a};
 };
 var $elm$regex$Regex$Match = F4(
@@ -7597,7 +7507,7 @@ var $elm$regex$Regex$fromString = function (string) {
 var $elm$regex$Regex$never = _Regex_never;
 var $elm$regex$Regex$replace = _Regex_replaceAtMost(_Regex_infinity);
 var $elm$core$String$toLower = _String_toLower;
-var $author$project$Article$Section$nameToId = A2(
+var $author$project$Blog$Section$nameToId = A2(
 	$elm$core$Basics$composeR,
 	$elm$core$String$trim,
 	A2(
@@ -7629,15 +7539,15 @@ var $elm$html$Html$Events$onClick = function (msg) {
 		'click',
 		$elm$json$Json$Decode$succeed(msg));
 };
-var $author$project$Article$SideNav$secView = function (sec) {
+var $author$project$Blog$SideNav$secView = function (sec) {
 	return A2(
 		$elm$html$Html$div,
 		_List_fromArray(
 			[
 				A3(
 				$elm$core$Basics$composeL,
-				A2($elm$core$Basics$composeL, $elm$html$Html$Events$onClick, $author$project$Article$SideNav$ToSection),
-				$author$project$Article$Section$nameToId,
+				A2($elm$core$Basics$composeL, $elm$html$Html$Events$onClick, $author$project$Blog$SideNav$ToSection),
+				$author$project$Blog$Section$nameToId,
 				sec.name)
 			]),
 		_List_fromArray(
@@ -7646,7 +7556,7 @@ var $author$project$Article$SideNav$secView = function (sec) {
 			]));
 };
 var $elm$html$Html$ul = _VirtualDom_node('ul');
-var $author$project$Article$SideNav$unfoldAll = F2(
+var $author$project$Blog$SideNav$unfoldAll = F2(
 	function (ls, level) {
 		var grouped = $elm$core$List$reverse(
 			A3(
@@ -7690,15 +7600,15 @@ var $author$project$Article$SideNav$unfoldAll = F2(
 						_List_Nil,
 						_List_fromArray(
 							[
-								$author$project$Article$SideNav$secView(x),
-								A2($author$project$Article$SideNav$unfoldAll, xs, level + 1)
+								$author$project$Blog$SideNav$secView(x),
+								A2($author$project$Blog$SideNav$unfoldAll, xs, level + 1)
 							]));
 				}
 			},
 			grouped);
 		return A2($elm$html$Html$ul, _List_Nil, subview);
 	});
-var $author$project$Article$SideNav$unfoldView = F2(
+var $author$project$Blog$SideNav$unfoldView = F2(
 	function (fs, idx) {
 		return A2(
 			$elm$html$Html$ul,
@@ -7713,19 +7623,19 @@ var $author$project$Article$SideNav$unfoldView = F2(
 						_List_Nil,
 						_List_fromArray(
 							[
-								$author$project$Article$SideNav$secView(sec.sec),
-								A2($author$project$Article$SideNav$unfoldAll, sec.subsec, 3)
+								$author$project$Blog$SideNav$secView(sec.sec),
+								A2($author$project$Blog$SideNav$unfoldAll, sec.subsec, 3)
 							])) : A2(
 						$elm$html$Html$li,
 						_List_Nil,
 						_List_fromArray(
 							[
-								$author$project$Article$SideNav$secView(sec.sec)
+								$author$project$Blog$SideNav$secView(sec.sec)
 							]));
 				},
 				A2($elm$core$List$indexedMap, $elm$core$Tuple$pair, fs)));
 	});
-var $author$project$Article$SideNav$view = function (model) {
+var $author$project$Blog$SideNav$view = function (model) {
 	return A2(
 		$elm$html$Html$nav,
 		_List_Nil,
@@ -7736,11 +7646,11 @@ var $author$project$Article$SideNav$view = function (model) {
 				_List_Nil,
 				_List_fromArray(
 					[
-						A2($author$project$Article$SideNav$unfoldView, model.sections, model.cursor)
+						A2($author$project$Blog$SideNav$unfoldView, model.sections, model.cursor)
 					]))
 			]));
 };
-var $author$project$Article$view = function (model) {
+var $author$project$Blog$view = function (model) {
 	return A2(
 		$elm$html$Html$div,
 		_List_Nil,
@@ -7753,8 +7663,8 @@ var $author$project$Article$view = function (model) {
 					[
 						A2(
 						$elm$html$Html$map,
-						$author$project$Article$GotBody,
-						$author$project$Article$Body$view(model.body))
+						$author$project$Blog$GotBody,
+						$author$project$Blog$Body$view(model.body))
 					])),
 				A2(
 				$elm$html$Html$aside,
@@ -7766,27 +7676,26 @@ var $author$project$Article$view = function (model) {
 					[
 						A2(
 						$elm$html$Html$map,
-						$author$project$Article$GotSideNav,
-						$author$project$Article$SideNav$view(model.sidenav))
+						$author$project$Blog$GotSideNav,
+						$author$project$Blog$SideNav$view(model.sidenav))
 					]))
 			]));
 };
-var $author$project$Page$Article$topicName = function (topic) {
+var $author$project$Page$Blog$topicName = function (topic) {
 	var name = topic.a;
 	return name;
 };
-var $author$project$Page$Article$ChangePath = function (a) {
+var $author$project$Page$Blog$ChangePath = function (a) {
 	return {$: 'ChangePath', a: a};
 };
 var $elm$html$Html$a = _VirtualDom_node('a');
-var $elm$core$String$endsWith = _String_endsWith;
 var $elm$html$Html$Attributes$href = function (url) {
 	return A2(
 		$elm$html$Html$Attributes$stringProperty,
 		'href',
 		_VirtualDom_noJavaScriptUri(url));
 };
-var $author$project$Page$Article$viewTopic = F2(
+var $author$project$Page$Blog$viewTopic = F2(
 	function (path, name) {
 		var newPath = _Utils_ap(
 			path,
@@ -7804,7 +7713,7 @@ var $author$project$Page$Article$viewTopic = F2(
 							$elm$html$Html$Attributes$href(
 							A2(
 								$elm$url$Url$Builder$absolute,
-								A2($elm$core$List$cons, '#/articles', newPath),
+								A2($elm$core$List$cons, '#/blog', newPath),
 								_List_Nil))
 						]),
 					_List_fromArray(
@@ -7816,18 +7725,18 @@ var $author$project$Page$Article$viewTopic = F2(
 			_List_fromArray(
 				[
 					$elm$html$Html$Events$onClick(
-					$author$project$Page$Article$ChangePath(newPath))
+					$author$project$Page$Blog$ChangePath(newPath))
 				]),
 			_List_fromArray(
 				[
 					$elm$html$Html$text(name)
 				]));
 	});
-var $author$project$Page$Article$emptyTopic = A2(
-	$author$project$Page$Article$Topic,
+var $author$project$Page$Blog$emptyTopic = A2(
+	$author$project$Page$Blog$Topic,
 	'',
-	$author$project$Page$Article$SubTopic(_List_Nil));
-var $author$project$Page$Article$visitPath = F2(
+	$author$project$Page$Blog$SubTopic(_List_Nil));
+var $author$project$Page$Blog$visitPath = F2(
 	function (path, topics) {
 		visitPath:
 		while (true) {
@@ -7838,26 +7747,26 @@ var $author$project$Page$Article$visitPath = F2(
 				var xs = path.b;
 				var nextTopic = A2(
 					$elm$core$Maybe$withDefault,
-					$author$project$Page$Article$emptyTopic,
+					$author$project$Page$Blog$emptyTopic,
 					$elm$core$List$head(
 						A2(
 							$elm$core$List$filter,
 							function (t) {
 								return _Utils_eq(
-									$author$project$Page$Article$topicName(t),
+									$author$project$Page$Blog$topicName(t),
 									x);
 							},
 							topics)));
 				var $temp$path = xs,
-					$temp$topics = $author$project$Page$Article$subTopicOf(nextTopic);
+					$temp$topics = $author$project$Page$Blog$subTopicOf(nextTopic);
 				path = $temp$path;
 				topics = $temp$topics;
 				continue visitPath;
 			}
 		}
 	});
-var $author$project$Page$Article$view = function (model) {
-	var nowTopics = A2($author$project$Page$Article$visitPath, model.path, model.topics);
+var $author$project$Page$Blog$view = function (model) {
+	var nowTopics = A2($author$project$Page$Blog$visitPath, model.path, model.topics);
 	return A2(
 		$elm$html$Html$ul,
 		_List_Nil,
@@ -7865,212 +7774,49 @@ var $author$project$Page$Article$view = function (model) {
 			$elm$core$List$map,
 			A2(
 				$elm$core$Basics$composeR,
-				$author$project$Page$Article$topicName,
-				$author$project$Page$Article$viewTopic(model.path)),
+				$author$project$Page$Blog$topicName,
+				$author$project$Page$Blog$viewTopic(model.path)),
 			nowTopics));
 };
-var $elm$time$Time$posixToMillis = function (_v0) {
-	var millis = _v0.a;
-	return millis;
-};
-var $elm$core$Basics$modBy = _Basics_modBy;
-var $author$project$Utils$seconds_to_days = function (s) {
-	var second = A2($elm$core$Basics$modBy, 60, s);
-	var mins = A2($elm$core$Basics$modBy, 60, (s / 60) | 0);
-	var hours = A2($elm$core$Basics$modBy, 24, (((s / 60) | 0) / 60) | 0);
-	var days = (s / ((24 * 60) * 60)) | 0;
-	return {day: days, hour: hours, minute: mins, second: second};
-};
-var $author$project$Utils$slack_off_time = function (time) {
-	var t = $elm$time$Time$posixToMillis(time);
-	var diff = ((t - 1671261642608) / 1000) | 0;
-	var dhm = $author$project$Utils$seconds_to_days(diff);
-	var hour = $elm$core$String$fromInt(dhm.hour);
-	var min = $elm$core$String$fromInt(dhm.minute);
-	var scs = $elm$core$String$fromInt(dhm.second);
-	var day = $elm$core$String$fromInt(dhm.day);
-	return day + (' days, ' + (hour + (' hours, ' + (min + (' mins, ' + (scs + (' seconds, current is ' + $elm$core$String$fromInt(t))))))));
-};
-var $author$project$Helper$GetTestArticle = {$: 'GetTestArticle'};
-var $author$project$Helper$GotSideNavigator = function (a) {
-	return {$: 'GotSideNavigator', a: a};
-};
-var $elm$html$Html$button = _VirtualDom_node('button');
-var $author$project$Helper$view = function (model) {
-	switch (model.$) {
-		case 'Empty':
-			return A2(
-				$elm$html$Html$div,
-				_List_Nil,
-				_List_fromArray(
-					[
-						A2(
-						$elm$html$Html$button,
-						_List_fromArray(
-							[
-								$elm$html$Html$Events$onClick($author$project$Helper$GetTestArticle)
-							]),
-						_List_fromArray(
-							[
-								$elm$html$Html$text('Get Test Markdown')
-							]))
-					]));
-		case 'TestArticle':
-			var article = model.a;
-			return A2(
-				$elm$html$Html$div,
-				_List_Nil,
-				_List_fromArray(
-					[
-						A2(
-						$elm$html$Html$map,
-						$author$project$Helper$GotTestArticle,
-						$author$project$Article$Body$view(article))
-					]));
-		case 'Clicked':
-			return A2(
-				$elm$html$Html$div,
-				_List_Nil,
-				_List_fromArray(
-					[
-						$elm$html$Html$text('clicked')
-					]));
-		default:
-			var article = model.a;
-			var sidenav = model.b;
-			return A2(
-				$elm$html$Html$div,
-				_List_Nil,
-				_List_fromArray(
-					[
-						A2(
-						$elm$html$Html$map,
-						$author$project$Helper$GotTestArticle,
-						$author$project$Article$Body$view(article)),
-						$elm$html$Html$text('over\n'),
-						$elm$html$Html$text('the side navigator is:\n'),
-						A2(
-						$elm$html$Html$map,
-						$author$project$Helper$GotSideNavigator,
-						$author$project$Article$SideNav$view(sidenav)),
-						$elm$html$Html$text('\n from \n'),
-						$elm$html$Html$text(
-						$elm$core$Debug$toString(sidenav))
-					]));
+var $author$project$Route$toPieces = function (route) {
+	if (route.$ === 'Home') {
+		return _List_Nil;
+	} else {
+		var urls = route.a;
+		return A2($elm$core$List$cons, 'blog', urls);
 	}
 };
-var $author$project$Underconstruction$view = function (model) {
-	return A2(
-		$elm$html$Html$div,
-		_List_Nil,
-		_List_fromArray(
-			[
-				A2(
-				$elm$html$Html$div,
-				_List_Nil,
-				_List_fromArray(
-					[
-						$elm$html$Html$text('Coming soon ...')
-					])),
-				A2(
-				$elm$html$Html$ul,
-				_List_Nil,
-				_List_fromArray(
-					[
-						A2(
-						$elm$html$Html$li,
-						_List_Nil,
-						_List_fromArray(
-							[
-								$elm$html$Html$text('blogs')
-							])),
-						A2(
-						$elm$html$Html$li,
-						_List_Nil,
-						_List_fromArray(
-							[
-								$elm$html$Html$text('explorable maps and movable avatars')
-							])),
-						A2(
-						$elm$html$Html$li,
-						_List_Nil,
-						_List_fromArray(
-							[
-								$elm$html$Html$text('light and dark themes')
-							])),
-						A2(
-						$elm$html$Html$li,
-						_List_Nil,
-						_List_fromArray(
-							[
-								$elm$html$Html$text('others')
-							]))
-					])),
-				A2(
-				$elm$html$Html$div,
-				_List_Nil,
-				_List_fromArray(
-					[
-						function () {
-						if (model.$ === 'PlanWithTime') {
-							var t = model.a;
-							var helper = model.b;
-							return A2(
-								$elm$html$Html$div,
-								_List_Nil,
-								_List_fromArray(
-									[
-										$elm$html$Html$text(
-										'the blogger has been slacking off for ' + $author$project$Utils$slack_off_time(t)),
-										A2(
-										$elm$html$Html$map,
-										$author$project$Underconstruction$GotHelper,
-										$author$project$Helper$view(helper))
-									]));
-						} else {
-							return $elm$html$Html$text('');
-						}
-					}()
-					]))
-			]));
+var $author$project$Route$toString = function (route) {
+	return '/#' + A2(
+		$elm$url$Url$Builder$absolute,
+		$author$project$Route$toPieces(route),
+		_List_Nil);
+};
+var $author$project$Route$href = function (route) {
+	return $elm$html$Html$Attributes$href(
+		$author$project$Route$toString(route));
 };
 var $author$project$Main$viewLink = function (path) {
 	return A2(
-		$elm$html$Html$li,
-		_List_Nil,
+		$elm$html$Html$a,
 		_List_fromArray(
 			[
-				A2(
-				$elm$html$Html$a,
-				_List_fromArray(
-					[
-						$elm$html$Html$Attributes$href(path)
-					]),
-				_List_fromArray(
-					[
-						$elm$html$Html$text(path)
-					]))
+				$author$project$Route$href(path)
+			]),
+		_List_fromArray(
+			[
+				$elm$html$Html$text(
+				$author$project$Route$toString(path))
 			]));
 };
 var $author$project$Main$view = function (model) {
 	switch (model.$) {
-		case 'Underconstruction':
-			var ud = model.a;
-			return {
-				body: A2(
-					$elm$core$List$map,
-					$elm$html$Html$map($author$project$Main$GotConstruction),
-					_List_fromArray(
-						[
-							$author$project$Underconstruction$view(ud)
-						])),
-				title: 'coming soon ...'
-			};
 		case 'Home':
 			return {
 				body: _List_fromArray(
 					[
-						$author$project$Main$viewLink('/articles/test.txt')
+						$author$project$Main$viewLink(
+						$author$project$Route$Blog(_List_Nil))
 					]),
 				title: 'home'
 			};
@@ -8082,17 +7828,20 @@ var $author$project$Main$view = function (model) {
 					]),
 				title: 'notfound'
 			};
-		case 'Article':
-			var article = model.a;
+		case 'Blog':
+			var blog = model.a;
 			return {
 				body: _List_fromArray(
 					[
 						A2(
 						$elm$html$Html$map,
-						$author$project$Main$GotArticle,
-						$author$project$Article$view(article))
+						$author$project$Main$GotBlog,
+						$author$project$Blog$view(blog))
 					]),
-				title: 'article'
+				title: A2(
+					$elm$core$Maybe$withDefault,
+					'no title',
+					$author$project$Blog$titleOf(blog))
 			};
 		default:
 			var page = model.a;
@@ -8101,10 +7850,10 @@ var $author$project$Main$view = function (model) {
 					[
 						A2(
 						$elm$html$Html$map,
-						$author$project$Main$GotPageArticle,
-						$author$project$Page$Article$view(page))
+						$author$project$Main$GotPageBlog,
+						$author$project$Page$Blog$view(page))
 					]),
-				title: 'article page'
+				title: 'Blog page'
 			};
 	}
 };

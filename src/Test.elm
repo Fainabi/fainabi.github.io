@@ -52,7 +52,7 @@ update msg model =
   case msg of
     LinkClicked urlRequest ->
       case urlRequest of
-        Browser.Internal url ->
+        Browser.Internal url -> Debug.log "model"
           ( model, Nav.pushUrl model.key (Url.toString url) )
 
         Browser.External href ->

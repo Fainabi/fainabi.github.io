@@ -1,17 +1,12 @@
-module Article exposing (..)
+module Blog exposing (..)
 
-import Browser.Dom as Dom
 import Html exposing (..)
 import Html.Attributes exposing (class)
-import Html.Events exposing (onClick)
 import Http
 
-import Article.Body as Body
-import Article.SideNav as SideNav
+import Blog.Body as Body
+import Blog.SideNav as SideNav
 import Session exposing (Session)
-
-import Browser
-import Task
 
 
 
@@ -35,7 +30,7 @@ getSession : Model -> Session
 getSession model = model.session
 
 type Msg
-    = LoadArticle String
+    = Loading
     | GotBody Body.Msg
     | GotSideNav SideNav.Msg
     | Finished (Result Http.Error ())
@@ -87,16 +82,12 @@ update msg model =
 
 
         _ ->
-             ( model, Debug.log ("::" ++ Debug.toString msg) Cmd.none )
+             ( model, Cmd.none )
 
 
+titleOf : Model -> Maybe String
+titleOf model =
+    case model.body of
+        Body.Article body -> Just body.title
 
-
--- main : Program () Model Msg
--- main =
---     Browser.element
---         { init = \_ -> init  "/articles/test.txt"
---         , view = view
---         , update = update
---         , subscriptions = \_ -> Sub.none
---         }
+        _ -> Nothing

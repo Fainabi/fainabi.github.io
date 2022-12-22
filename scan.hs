@@ -37,7 +37,7 @@ treeToJSON tree =
 
 main :: IO ()
 main = do
-    t <- scanMD "" "articles"
-    writeFile "articles/index.json" (treeToJSON t)
+    t <- scanMD "" "blog"
+    writeFile "blog/index.json" (treeToJSON t)
 
  

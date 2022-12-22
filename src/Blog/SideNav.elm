@@ -1,4 +1,4 @@
-module Article.SideNav exposing (..)
+module Blog.SideNav exposing (..)
 
 import Browser.Dom as Dom
 import Html exposing (..)
@@ -6,8 +6,8 @@ import Html.Attributes exposing (id, class)
 import Html.Events exposing (onClick)
 import Task
 
-import Article.Section as Section exposing (Section, extractSections)
-import Article.Body as Body
+import Blog.Section as Section exposing (Section, extractSections)
+import Blog.Body as Body
 
 
 

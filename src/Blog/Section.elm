@@ -1,4 +1,4 @@
-module Article.Section exposing (..)
+module Blog.Section exposing (..)
 
 import Browser exposing (..)
 import Html exposing (..)

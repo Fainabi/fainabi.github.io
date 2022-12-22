@@ -1,27 +1,24 @@
 module Main exposing (..)
 
-import Browser.Navigation as Nav
-import Url
-import Url.Builder
 import Browser
+import Browser.Navigation as Nav
 import Html exposing (..)
 import Html.Attributes exposing (..)
+import Url
+import Url.Builder
 
-import Article
-import Article.Slug as Slug
-import Page.Article
+import Blog
+import Page.Blog
 import Route exposing (Route)
 import Session exposing (Session, Session(..), navKey)
 
-import Underconstruction
 import Debug
 
 type Model 
-    = Underconstruction Underconstruction.Model
-    | Home Session
+    = Home Session
     | NotFound Session
-    | Article Article.Model
-    | PageArticle Page.Article.Model
+    | Blog Blog.Model
+    | PageBlog Page.Blog.Model
 
 getSession : Model -> Session
 getSession model =
@@ -30,18 +27,15 @@ getSession model =
 
         NotFound s -> s
 
-        Article article -> Article.getSession article
+        Blog blog -> Blog.getSession blog
 
-        Underconstruction ud -> Underconstruction.getSession ud
-
-        PageArticle page -> Page.Article.getSession page
+        PageBlog page -> Page.Blog.getSession page
 
 type Msg
-    = GotConstruction Underconstruction.Msg
-    | UrlChanged Url.Url
+    = UrlChanged Url.Url
     | LinkClicked Browser.UrlRequest
-    | GotArticle Article.Msg
-    | GotPageArticle Page.Article.Msg
+    | GotBlog Blog.Msg
+    | GotPageBlog Page.Blog.Msg
 
 
 
@@ -59,78 +53,60 @@ main =
 
 init : () -> Url.Url -> Nav.Key -> (Model, Cmd Msg)
 init _ url key =
-    Debug.log "route" (routeTo (Route.fromUrl url) (Home (Session key)))
-    -- routeTo (Just <| Route.Article <| Slug.Slug "test.txt") (Home (Session key))
-    -- let (model, msg) = Article.init "/articles/test.txt"
-    -- in (Article model, Cmd.map GotArticle msg)
-    -- let (model, msg) = Underconstruction.init ()
-    -- in (Underconstruction model, Cmd.map GotConstruction msg)
+    (routeTo (Route.fromUrl url) (Home (Session key)))
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
     case (msg, model) of
-        (GotConstruction gcMsg, Underconstruction gcModel) -> 
-            let (nm, nmsg) = Underconstruction.update gcMsg gcModel 
-            in (Underconstruction nm, Cmd.map GotConstruction nmsg)
-
-        (_, Home _) -> (model, Cmd.none)
-
         (UrlChanged url, _) -> 
-            routeTo (Route.fromUrl url) model
+            (routeTo (Route.fromUrl url) model)
 
         (LinkClicked req, _) -> 
             case req of 
-                Browser.Internal url ->
+                Browser.Internal url -> Debug.log "internal"
                     ( model, Nav.pushUrl (navKey (getSession model)) (Url.toString url))
 
-                Browser.External href ->
+                Browser.External href -> Debug.log "external"
                     ( model, Nav.load href)
 
-        (GotArticle aMsg, Article aModel) -> 
+        (GotBlog aMsg, Blog aModel) -> 
             let
-                (newModel, newMsg) = Article.update aMsg aModel
+                (newModel, newMsg) = Blog.update aMsg aModel
             in
-                (Article newModel, Cmd.map GotArticle newMsg)
+                (Blog newModel, Cmd.map GotBlog newMsg)
 
-        (GotPageArticle pMsg, PageArticle pModel) ->
+        (GotPageBlog pMsg, PageBlog pModel) ->
             let
-                (newModel, newMsg) = Page.Article.update pMsg pModel
+                (newModel, newMsg) = Page.Blog.update pMsg pModel
             in
-                (PageArticle newModel, Cmd.map GotPageArticle newMsg)
+                (PageBlog newModel, Cmd.map GotPageBlog newMsg)
             
-
         _ -> (model, Cmd.none)
 
 view : Model -> Browser.Document Msg
 view model =
     case model of
-        Underconstruction ud -> 
-            { title = "coming soon ..."
-            , body = 
-                List.map (Html.map GotConstruction) [ Underconstruction.view ud ]
-            }
-
         Home _ -> 
             { title = "home"
-            , body = [ viewLink "/articles/test.txt" ]
+            , body = [ viewLink <| Route.Blog [] ]
             }
 
         NotFound _ ->
             { title = "notfound"
             , body = [ text "where is here" ]}
 
-        Article article ->
-            { title = "article"
-            , body = [ Html.map GotArticle <| Article.view article ]}
+        Blog blog ->
+            { title = Blog.titleOf blog |> Maybe.withDefault "no title"
+            , body = [ Html.map GotBlog <| Blog.view blog ]}
 
-        PageArticle page ->
-            { title = "article page"
-            , body = [ Html.map GotPageArticle <| Page.Article.view page]}
+        PageBlog page ->
+            { title = "Blog page"
+            , body = [ Html.map GotPageBlog <| Page.Blog.view page]}
 
 
-viewLink : String -> Html msg
+viewLink : Route -> Html msg
 viewLink path =
-  li [] [ a [ href path ] [ text path ] ]
+   a [ Route.href path ] [ text (Route.toString path) ]
 
 
 routeTo : Maybe Route -> Model -> ( Model, Cmd Msg )
@@ -143,18 +119,17 @@ routeTo maybeRoute model =
 
         Just Route.Home -> ( Home session, Cmd.none )
 
-        Just (Route.Article s) -> 
-            let 
-                (newModel, msg) = 
-                    (Url.Builder.absolute ["articles", Slug.toUrl s] [])
-                        |> Article.init session
-            in 
-                ( Article newModel, Cmd.map GotArticle msg )
-
-        Just Route.PageArticle ->
+        Just (Route.Blog blog) ->
             let
-                (newModel, msg) =
-                    Page.Article.init (getSession model)
+                url = Url.Builder.absolute ("blog"::blog) [] |> Debug.log "url is"
             in
-                ( PageArticle newModel, Cmd.map GotPageArticle msg )
+                if String.endsWith ".md" url
+                then 
+                    let (newModel, msg) = Blog.init session url
+                    in ( Blog newModel, Cmd.map GotBlog msg )
+                else
+                    let
+                        (newModel, msg) = Page.Blog.initWithPath blog session 
+                    in
+                        ( PageBlog newModel, Cmd.map GotPageBlog msg )
 

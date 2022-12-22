@@ -1,18 +1,17 @@
-module Article.Body exposing (..)
+module Blog.Body exposing (..)
 
 import Html exposing (..)
 import Html.Attributes exposing (class)
 import Http
-import Debug
 import Markdown
 
-import Article.Utils exposing (..)
-import Article.Attribute as ArticleAttr exposing (ArticleAttribute)
-import Article.Section exposing (Section)
+import Blog.Utils exposing (..)
+import Blog.Attribute exposing (ArticleAttribute)
 
+import Debug
 
 type Model 
-    = Loading String
+    = Loading
     | Failure Http.Error
     | Unknown
     | Article 
@@ -28,7 +27,7 @@ type Msg
 
 init : String -> ( Model, Cmd Msg )
 init url = 
-    ( Loading url
+    ( Loading
     , Http.get 
         { url = url
         , expect = Http.expectString GetArticle} )
@@ -37,7 +36,7 @@ init url =
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case (msg, model) of
-        (GetArticle result, Loading url) ->   
+        (GetArticle result, Loading) ->   
             case result of
                 Err e -> ( Failure e, Cmd.none )
 
@@ -46,8 +45,7 @@ update msg model =
                         { title = titleOf req "No Title"
                         , content = req
                         , parsed = Markdown.toHtml [class "article"] req
-                        , attributes = 
-                            [ArticleAttr.Url url]}
+                        , attributes = []}
                     , Cmd.none )
 
         (Finished, _) ->
@@ -61,7 +59,7 @@ view model =
         Article article -> div [] 
             [ article.parsed ]
 
-        Loading url -> text <| "now loading from " ++ url
+        Loading  -> div [] []
 
         Failure err -> div [] [ text "Error Occured: ", text (Debug.toString err) ]
 

@@ -1,5 +1,6 @@
-module Article.Utils exposing (..)
+module Blog.Utils exposing (..)
 
+import Debug
 
 titleOf : String -> String -> String
 titleOf str defaultTitle =
@@ -9,8 +10,9 @@ titleOf str defaultTitle =
             List.head
     in
         case maybeTitle of
-            Just t -> t
+            Just t -> String.replace "#" "" t |> String.trim
 
             Nothing -> defaultTitle
+            
 
 

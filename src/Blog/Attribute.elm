@@ -1,4 +1,4 @@
-module Article.Attribute exposing (..)
+module Blog.Attribute exposing (..)
 
 -- for annotations on article
 

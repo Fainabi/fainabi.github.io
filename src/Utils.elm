@@ -32,3 +32,4 @@ slack_off_time time =
     scs = String.fromInt dhm.second
   in
     day ++ " days, " ++ hour ++ " hours, " ++ min ++ " mins, " ++ scs ++ " seconds, current is " ++ (String.fromInt t)
+
