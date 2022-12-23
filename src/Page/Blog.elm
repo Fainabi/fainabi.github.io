@@ -55,7 +55,7 @@ init s =
     ( Model s [] []
     , Http.get 
         { url = articleIdx
-        , expect = Http.expectJson GotIdx idxDecoder} ) |> Debug.log "init"
+        , expect = Http.expectJson GotIdx idxDecoder} )
 
 type Msg
     = Finished
@@ -125,7 +125,7 @@ update msg model =
 
         ChangePath path -> 
             ( { model | path = path }
-            , Nav.pushUrl 
+            , Nav.pushUrl
                 (model |> getSession |> navKey) 
                 (Url.Builder.absolute ("#/blog"::path) []))
 

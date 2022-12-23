@@ -1,6 +1,5 @@
 module Route exposing (..)
 
-import Browser.Navigation as Nav
 import Html exposing (Attribute)
 import Html.Attributes as Attr
 import Url exposing (Url)

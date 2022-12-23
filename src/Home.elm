@@ -4,13 +4,14 @@ module Home exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 
+import Session exposing (Session)
 
 
 type alias Model =
-    { }
+    { session : Session }
 
-init : () -> Model
-init _ = Model
+init : Session -> Model
+init s = Model s
 
 type Msg
     = Finished
@@ -23,5 +24,9 @@ update msg model =
 
 view : Model -> Html Msg
 view model =
-    div [] []
+    div [] [text "sweet home"]
 
+
+
+getSession : Model -> Session
+getSession home = home.session
