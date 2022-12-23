@@ -1,4 +1,14 @@
+# elm core
 elm-stuff
-.vscode
 
+# development (vscode task and uglifyjs)
+.vscode
+node_modules/
+package.json
+package-lock.json
+
+# test unit
 test/
+
+# larger file
+elm.js
