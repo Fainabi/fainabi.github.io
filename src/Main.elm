@@ -59,9 +59,9 @@ update msg model =
 
         GotTopNav navMsg ->
             let
-                newNav = TopNav.update navMsg model.topnav
+                (newNav, newMsg) = TopNav.update navMsg model.topnav
             in
-                ( { model | topnav = newNav}, Cmd.none )
+                ( { model | topnav = newNav}, Cmd.map GotTopNav newMsg )
 
 view : Model -> Browser.Document Msg
 view model =
@@ -75,13 +75,23 @@ view model =
         }
 
 
+
+subscriptions : Model -> Sub Msg
+subscriptions model =
+    Sub.batch 
+        [ Sub.map GotTopNav (TopNav.subscriptions model.topnav)]
+
+
 main : Program () Model Msg
 main =
     Browser.application
         { init = init
         , view = view
         , update = update
-        , subscriptions = \_ -> Sub.none
+        , subscriptions = subscriptions
         , onUrlChange = UrlChanged
         , onUrlRequest = LinkClicked
         }
+
+
+

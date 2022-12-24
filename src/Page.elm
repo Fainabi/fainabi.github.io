@@ -61,16 +61,6 @@ init url key =
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
     case (msg, model) of
-        -- (UrlChanged url, _) -> 
-        --     (routeTo (Route.fromUrl url) model)
-
-        -- (LinkClicked req, _) -> 
-        --     case req of 
-        --         Browser.Internal url -> Debug.log "internal"
-        --             ( model, Nav.pushUrl (navKey (getSession model)) (Url.toString url))
-
-        --         Browser.External href -> Debug.log "external"
-        --             ( model, Nav.load href)
 
         (GotBlog aMsg, Blog aModel) -> 
             let
@@ -105,11 +95,6 @@ view model =
         PageBlog page ->
             { title = "Blog page"
             , body = [ Html.map GotPageBlog <| Page.Blog.view page]}
-
-
-viewLink : Route -> Html msg
-viewLink path =
-   a [ Route.href path ] [ text (Route.toString path) ]
 
 
 routeTo : Maybe Route -> Model -> ( Model, Cmd Msg )

@@ -10,7 +10,6 @@ import Blog.Section as Section exposing (Section, extractSections)
 import Blog.Body as Body
 
 
-
 type alias FoldOnceSection = 
     { sec : Section
     , subsec : List Section}
@@ -38,7 +37,7 @@ init body =
         _ -> 
             { sections = [] 
             , cursor = 0}
-
+            
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of

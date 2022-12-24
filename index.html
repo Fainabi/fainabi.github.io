@@ -2,9 +2,34 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <script src="elm.min.js"></script>
+  <script type="text/javascript" src="elm.js"></script>
+  <link rel="stylesheet" href="css/general.css">
+  <link rel="stylesheet" href="css/topnav.css">
 </head>
+
 <body>
-  <script>var app = Elm.Main.init();</script>
+  <div id="app"></div>
 </body>
+
+<script type="text/javascript">
+  var app = Elm.Main.init({
+    node: document.getElementById("app")
+  });
+
+  // theme ports
+  const theme = window.localStorage.getItem("theme");
+  if (theme === "Dark") document.body.classList.add("dark");
+
+  app.ports.changeTheme.subscribe(theme => {
+    if (theme === "Dark")
+      document.body.classList.add("dark");
+    else
+      document.body.classList.remove("dark");   
+    
+    window.localStorage.setItem("theme", theme);
+  });
+
+  app.ports.loadLocalTheme.send(theme);
+
+</script>
 </html>

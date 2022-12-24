@@ -24,7 +24,7 @@ update msg model =
 
 view : Model -> Html Msg
 view model =
-    div [] [text "sweet home"]
+    div [class "container"] [text "sweet home"]
 
 
 
