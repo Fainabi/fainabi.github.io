@@ -2,9 +2,8 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <script type="text/javascript" src="elm.js"></script>
-  <link rel="stylesheet" href="css/general.css">
-  <link rel="stylesheet" href="css/topnav.css">
+  <script type="text/javascript" src="elm.min.js"></script>
+  <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
@@ -17,7 +16,7 @@
   });
 
   // theme ports
-  const theme = window.localStorage.getItem("theme");
+  const theme = window.localStorage.getItem("theme") || "Light";
   if (theme === "Dark") document.body.classList.add("dark");
 
   app.ports.changeTheme.subscribe(theme => {

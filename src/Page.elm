@@ -78,23 +78,30 @@ update msg model =
 
 view : Model -> Browser.Document Msg
 view model =
-    case model of
-        Home home -> 
-            { title = "home"
-            , body = [ Html.map GotHome (Home.view home) ]
-            }
+    let
+        viewdDom = 
+            case model of
+                Home home -> 
+                        Html.map GotHome (Home.view home)
 
-        NotFound _ ->
-            { title = "notfound"
-            , body = [ text "where is here" ]}
+                NotFound _ ->
+                    text "where is here" 
 
-        Blog blog ->
-            { title = Blog.titleOf blog |> Maybe.withDefault "no title"
-            , body = [ Html.map GotBlog <| Blog.view blog ]}
+                Blog blog ->
+                    Html.map GotBlog <| Blog.view blog
 
-        PageBlog page ->
-            { title = "Blog page"
-            , body = [ Html.map GotPageBlog <| Page.Blog.view page]}
+                PageBlog page ->
+                    Html.map GotPageBlog <| Page.Blog.view page
+
+        title =
+            case model of
+                Home home -> "home"
+                NotFound _ -> "notfound"
+                Blog blog -> Blog.titleOf blog |> Maybe.withDefault "no title"
+                PageBlog page -> "Blog list"
+    in
+        { title = title
+        , body = [div [class "main-wrapper"] [viewdDom]]}
 
 
 routeTo : Maybe Route -> Model -> ( Model, Cmd Msg )

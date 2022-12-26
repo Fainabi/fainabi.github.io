@@ -40,8 +40,8 @@ type Msg
 
 view : Model -> Html Msg
 view model =
-    div [] 
-        [ article [] 
+    div [class "main-blog"] 
+        [ article [class "blog-content"] 
             [ Html.map GotBody (Body.view model.body) ]
         , aside [class "toc"]
             [ Html.map GotSideNav (SideNav.view model.sidenav) ]

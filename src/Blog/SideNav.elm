@@ -2,7 +2,7 @@ module Blog.SideNav exposing (..)
 
 import Browser.Dom as Dom
 import Html exposing (..)
-import Html.Attributes exposing (id, class)
+import Html.Attributes exposing (id, class, href)
 import Html.Events exposing (onClick)
 import Task
 
@@ -57,13 +57,12 @@ update msg model =
 view : Model -> Html Msg
 view model =
     nav [] 
-        [ div [] 
-            [ unfoldView model.sections model.cursor ]]
+        [ unfoldView model.sections model.cursor ]
 
 secView : Section -> Html Msg
 secView sec =
     div 
-        [ onClick << ToSection << Section.nameToId <| sec.name ] 
+        [ onClick << ToSection << Section.nameToId <| sec.name, class "nav-section"] 
         [ text sec.name ]
 
 

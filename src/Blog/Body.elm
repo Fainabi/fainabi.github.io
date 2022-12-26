@@ -56,8 +56,7 @@ update msg model =
 view : Model -> Html Msg
 view model =
     case model of
-        Article article -> div [] 
-            [ article.parsed ]
+        Article article -> article.parsed
 
         Loading  -> div [] []
 
