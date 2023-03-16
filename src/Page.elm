@@ -116,7 +116,7 @@ routeTo maybeRoute model =
 
         Just (Route.Blog blog) ->
             let
-                url = Url.Builder.absolute ("blog"::blog) [] |> Debug.log "url"
+                url = Url.Builder.absolute ("blog"::blog) []
             in
                 if String.endsWith ".md" url
                 then 

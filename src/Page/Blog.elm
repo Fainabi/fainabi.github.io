@@ -2,14 +2,15 @@ module Page.Blog exposing (..)
 
 -- This file shows page redirecting to articles, i.e. the entry
 import Browser.Navigation as Nav
-import Html exposing (Html, text, ul, li, a)
-import Html.Attributes exposing (href)
+import Html exposing (Html, text, ul, li, a, div, span)
+import Html.Attributes exposing (href, class)
 import Html.Events exposing (onClick)
 import Http
 import Json.Decode as Decode exposing (Decoder, field, string, list)
 import Url.Builder
 
 import Session exposing (Session, navKey)
+import Blog.NavIdx as NavIdx
 
 import Debug
 
@@ -66,24 +67,68 @@ view : Model -> Html Msg
 view model =
     let
         nowTopics = visitPath model.path model.topics
+        urlPath = "/blog/" ++ (String.join "/" model.path)
+        (nowCats, nowBlogs) = separateCatBlog <| List.map topicName nowTopics
+
+        catblog = 
+            if List.isEmpty nowTopics
+            then div [] [text "Nothing is here >_<"]
+            else div [class "catblog"] 
+                    [ viewCategories model.path nowCats
+                    , viewTopics model.path nowBlogs]
     in
-        ul []
-            (List.map (topicName >> viewTopic model.path) nowTopics)
+        div [] [
+            NavIdx.view urlPath,
+            div [class "main-blog"] [catblog]
+        ]
 
 
+viewTopics : List String -> List String -> Html Msg
+viewTopics path names =
+    if List.isEmpty names
+    then div [] []
+    else
+        div [class "list-blogs"] [
+            text "Blogs",
+            ul [] (List.map (viewTopic path) names)
+        ]
+
+viewCategories : List String -> List String -> Html Msg
+viewCategories path names = 
+    if List.isEmpty names
+    then div [] []
+    else
+        div [class "list-cats"] [
+            text "Categories",
+            ul [] (List.map (viewCategory path) names)
+        ]
+        
 viewTopic : List String -> String -> Html Msg
 viewTopic path name =
     let
         newPath = path ++ [name]
     in
-        if String.endsWith ".md" name
-        then 
-            li [] 
-                [a 
-                    [href (Url.Builder.absolute ("#/blog"::newPath) [])] 
-                    [text name]]
-        else 
-            li [onClick (ChangePath newPath)] [text name]
+        li [] [a 
+                [href (Url.Builder.absolute ("#/blog"::newPath) [])] 
+                [text name]]
+
+
+viewCategory : List String -> String -> Html Msg
+viewCategory path name = 
+    let
+        newPath = path ++ [name]
+    in
+        li [] [
+            span [class "list-cat-item", onClick (ChangePath newPath)] 
+                [text name]]
+
+separateCatBlog : List String -> (List String, List String)
+separateCatBlog names =
+    let
+        isBlog name = String.endsWith ".md" name || String.endsWith ".org" name
+    in
+        ( List.filter (not << isBlog) names
+        , List.filter isBlog names)
 
 visitPath : List String -> List Topic -> List Topic
 visitPath path topics =

@@ -10,6 +10,9 @@ type alias Section =
     }
 
 
+nameOf : Section -> String
+nameOf sec = sec.name
+
 nameToId : String -> String
 nameToId =
     String.trim 

@@ -27,9 +27,9 @@ body {
 .dark {
   --text-white: #e6e6e6;
   --text-dark: #ffffff;
-  --bg-grey-light: #142136;
-  --bg-white: #22395d;
-  --bg-blue-dark: #142136;
+  --bg-grey-light: #7c7f84;
+  --bg-white: #282c33;
+  --bg-blue-dark: #f5f5f5;
   --bg-indigo: #7577e1;
 }
 .container {
@@ -42,4 +42,9 @@ body {
   padding-right: var(--gutter);
   width: 100%;
   justify-content: space-between;
+}
+
+a {
+  text-decoration: none;
+  color: var(--text-dark);
 }

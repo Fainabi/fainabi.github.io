@@ -33,3 +33,12 @@ slack_off_time time =
   in
     day ++ " days, " ++ hour ++ " hours, " ++ min ++ " mins, " ++ scs ++ " seconds, current is " ++ (String.fromInt t)
 
+
+scanList : (a -> b -> a) -> a -> List b -> List a
+scanList f v ls =
+  case ls of
+    [] -> []
+
+    x::xs ->
+      let y = f v x 
+      in y::(scanList f y xs)

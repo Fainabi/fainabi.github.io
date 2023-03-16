@@ -5,6 +5,7 @@ import Html.Attributes exposing (class)
 import Http
 
 import Blog.Body as Body
+import Blog.NavIdx as NavIdx
 import Blog.SideNav as SideNav
 import Session exposing (Session)
 
@@ -40,12 +41,16 @@ type Msg
 
 view : Model -> Html Msg
 view model =
-    div [class "main-blog"] 
-        [ article [class "blog-content"] 
-            [ Html.map GotBody (Body.view model.body) ]
-        , aside [class "toc"]
-            [ Html.map GotSideNav (SideNav.view model.sidenav) ]
+    div []
+        [ NavIdx.view model.url
+        , div [class "main-blog"] 
+            [ article [class "blog-content"] 
+                [ Html.map GotBody (Body.view model.body) ]
+            , aside [class "toc"]
+                [ Html.map GotSideNav (SideNav.view model.sidenav) ]
+            ]
         ]
+    
         
         
 
@@ -75,9 +80,9 @@ update msg model =
 
         GotSideNav navMsg ->
             let
-                (_, newMsg) = SideNav.update navMsg model.sidenav
+                ( newSideNav, newMsg) = SideNav.update navMsg model.sidenav
             in
-                ( model
+                ( { model | sidenav = newSideNav }
                 , Cmd.map GotSideNav newMsg)
 
 

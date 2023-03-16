@@ -7,7 +7,7 @@ When you gaze into the blogs, they become shy.
 - side navigator reflecting process of reading (done)
 - cheaper DOM handling
 - scripts for replacing math formula with rendered static images in markdown source file
-- blog path tree for navigation
+- blog path tree for navigation (done)
 
 ### Side Navigator
 
@@ -37,3 +37,16 @@ Every time when I will write over a new blog, I'd like to just throw it into one
 category, and it should be capable to detect new blog in. 
 However, the index to these blogs is essential, to tell the browser which blogs are accessable. In a client-server model, the server handles requests and send back according to a database.
 For gitpages, we could set a file to store the index, taking the place of database. That's what `scan.hs` does.
+
+### Iconize the navigation
+Replace `Blog` with an icon.
+
+
+## Journals
+
+### Development Journals
+
+- 2023.3.14: build basic directory-to-blog structure
+- 2023.3.16: minimal theme and icon set
+
+### Issues

@@ -53,16 +53,24 @@ subscriptions _ =
 
 view : Model -> Html Msg
 view model =
-    nav [class "topnav"] 
-        [ div [class "container"] 
-            [ div [class "topnav-home"] 
-                [a [href "/#/"] [ text "home" ]]
-            , div [class "topnav-main"]
-                [ div [class "theme-switcher"] 
-                    [button [ onClick (ChangeTheme model.theme) ] [text "theme"]]
-                , div [class "topnav-item"] [
-                    a [href "/#/blog"] [ text "blog"]]
-                ]
+    let
+        (logo, theme) = case model.theme of 
+            Light -> ("assets/logo.svg", "assets/sun.svg")
+            _ -> ("assets/logo-dark.svg", "assets/moon.svg")
+        
+    in
+        nav [class "topnav"] 
+            [ div [class "topnav-content"] [
+                div [class "container"] 
+                    [ div [class "topnav-home"] 
+                        [ a [href "/#/"] [ 
+                            div [class "container"] [
+                                img [id "home-logo", src logo] [text "Home"]]]
+                        , a [href "/#/blog"] [ text "Blog"]]
+                    , div [class "topnav-main"]
+                        [button [ onClick (ChangeTheme model.theme) ] [
+                            span [class "container"] [
+                                img [src theme] [text "Theme"]]]]
+                    ]]
             ]
-        ]
     

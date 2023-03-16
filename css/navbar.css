@@ -1,0 +1,33 @@
+/* navigation for page index */
+.navidx {
+    display: flex;
+    position: static;
+    align-items: center;
+    box-sizing: border-box;
+    justify-content: space-between;
+
+    padding-left: 20%;
+    /* background-color: var(--bg-grey-light); */
+    border-color: var(--bg-blue-dark);
+    border-style: none none solid none;
+    border-width: 1px;
+}
+
+.navidx ol {
+    /* list-style: none; */
+    padding: 0;
+    margin: 0;
+}
+
+.navidx li {
+    display: inline-flex;
+}
+
+.navidx span {
+    margin-left: 1rem;
+    margin-right: 1rem;
+}
+
+.navidx .navidx-path::after {
+    content: "»";
+}

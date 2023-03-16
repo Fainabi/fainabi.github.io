@@ -7,8 +7,6 @@ import Url.Builder
 import Url.Parser as Parser exposing (Parser, oneOf, s, (</>), string)
 
 
-import Debug
-
 type Route
     = Home
     | Blog (List String)

@@ -3,7 +3,6 @@
     
 
     /* layout */    
-    max-width: var(--max-width);
     padding-left: var(--gutter);
     padding-right: var(--gutter);
     margin-left: auto;
@@ -11,12 +10,40 @@
 
     /* color */
     color: brown;
+
+    /* font */
+    font-size: larger;
+
+    border-bottom: 1px;
+    border-color: var(--bg-blue-dark);
+    border-style: none none solid none;
 }
+.topnav a {
+    text-decoration: none;
+    color: var(--text-dark);
+}
+.topnav button {
+    text-decoration: none;
+    background: none;
+    appearance: none;
+    border: none;
+    color: var(--text-dark);
+    font-size: large;
+    cursor: pointer;
+    display: inline-block;
+}
+.topnav-content {
+    max-width: var(--max-width);
+    margin: auto;
+}
+
+
 .topnav-home {
     align-items: center;
     display: flex;
     height: var(--topnav-height);
     flex: 0 1;
+    gap: 1rem;
 }
 .topnav-main {
     align-items: center;
@@ -27,4 +54,3 @@
     height: var(--topnav-height);
     justify-content: right;
 }
-

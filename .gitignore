@@ -12,3 +12,6 @@ test/
 
 # larger file
 elm.js
+
+# julia package
+*.toml
