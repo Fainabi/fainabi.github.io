@@ -1,18 +1,21 @@
-module Main exposing (..)
+port module Main exposing (..)
 
+-- External packages
 import Browser
 import Browser.Navigation as Nav
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Url
 
+-- local packages
 import Page
 import Route
 import Session exposing (navKey)
 import TopNav
 
+port loadMathJax : () -> Cmd msg
 
-
+-- The model contains a main html page and the top navigator bar
 type alias Model =
     { page : Page.Model
     , topnav : TopNav.Model
@@ -34,7 +37,7 @@ type Msg
     | LinkClicked Browser.UrlRequest
 
 
-update : Msg -> Model ->  ( Model, Cmd Msg )
+update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         UrlChanged url ->
@@ -55,7 +58,7 @@ update msg model =
             let
                 (newPage, newMsg) = Page.update pageMsg model.page
             in
-                ( { model | page = newPage }, Cmd.map GotPage newMsg )
+                ( { model | page = newPage }, Cmd.batch [Cmd.map GotPage newMsg, loadMathJax ()])
 
         GotTopNav navMsg ->
             let
@@ -79,7 +82,7 @@ view model =
 subscriptions : Model -> Sub Msg
 subscriptions model =
     Sub.batch 
-        [ Sub.map GotTopNav (TopNav.subscriptions model.topnav)]
+        [ Sub.map GotTopNav (TopNav.subscriptions model.topnav) ]
 
 
 main : Program () Model Msg

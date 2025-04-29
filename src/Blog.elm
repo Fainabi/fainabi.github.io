@@ -1,7 +1,7 @@
 module Blog exposing (..)
 
 import Html exposing (..)
-import Html.Attributes exposing (class)
+import Html.Attributes exposing (class, id, attribute)
 import Http
 
 import Blog.Body as Body
@@ -48,6 +48,7 @@ view model =
                 [ Html.map GotBody (Body.view model.body) ]
             , aside [class "toc"]
                 [ Html.map GotSideNav (SideNav.view model.sidenav) ]
+            , div [id "mathjax", attribute "toggle" "on"] []
             ]
         ]
     

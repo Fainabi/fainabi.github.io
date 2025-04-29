@@ -14,7 +14,7 @@
   var app = Elm.Main.init({
     node: document.getElementById("app")
   });
-
+  
   // theme ports
   const theme = window.localStorage.getItem("theme") || "Light";
   if (theme === "Dark") document.body.classList.add("dark");
@@ -30,5 +30,40 @@
 
   app.ports.loadLocalTheme.send(theme);
 
+  // mathjax port
+  app.ports.loadMathJax.subscribe(() => {
+    const targetNode = document.getElementsByClassName("main-blog")[0];  // main-blog is the body of blog pages
+    const config = { attributes: true, childList: true, subtree: true };
+    const observer = new MutationObserver((mutationList, observer) => {
+      const mathjax = document.getElementById("mathjax");
+      if (mathjax != undefined && mathjax.getAttribute("toggle") == "on") {
+        
+        // load mathjax for rendering
+        // see `https://mathjax.github.io/MathJax-demos-web/load-mathjax/load-mathjax.html.html`
+        setTimeout(() => {
+          if (document.body.querySelector('math') ||
+            document.body.textContent.match(/(?:\$|\\\(|\\\[|\\begin\{.*?})/)) 
+          {
+            window.MathJax = {
+              tex: {
+                inlineMath: {'[+]': [['$', '$']]}
+              }
+            };
+            var script = document.createElement('script');
+            script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+            document.head.appendChild(script);
+          }
+        }, 50);
+
+        // label it off
+        mathjax.setAttribute("toggle", "off");
+
+        // observer is used only once
+        observer.disconnect();
+      }
+    });
+
+    observer.observe(targetNode, config);
+  });
 </script>
 </html>

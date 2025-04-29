@@ -42,3 +42,5 @@ scanList f v ls =
     x::xs ->
       let y = f v x 
       in y::(scanList f y xs)
+
+
