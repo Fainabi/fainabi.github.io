@@ -32,5 +32,5 @@ view model =
                     (\(idx, s) url -> li [] [
                         a [Route.href (Route.Blog url), class (idxToClass idx)] [
                             span [] [text s]]]) 
-                (List.indexedMap Tuple.pair ls) lsAcc)]
+                    (List.indexedMap Tuple.pair ls) lsAcc)]
 

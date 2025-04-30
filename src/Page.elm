@@ -13,7 +13,6 @@ import Page.Blog
 import Route exposing (Route)
 import Session exposing (Session, Session(..), navKey)
 
-import Debug
 
 type Model 
     = Home Home.Model

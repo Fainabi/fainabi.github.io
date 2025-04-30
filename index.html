@@ -46,7 +46,8 @@
           {
             window.MathJax = {
               tex: {
-                inlineMath: {'[+]': [['$', '$']]}
+                // inlineMath: {'[+]': [['$', '$'], ['\\(', '\\)']]}
+                inlineMath: [['$', '$'], ['\\(', '\\)']]
               }
             };
             var script = document.createElement('script');

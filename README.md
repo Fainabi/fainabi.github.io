@@ -11,6 +11,6 @@ It's a repository for developing personal web page, including blogs and some lit
 
 ### Blog List Page
 1. Foldable category
-2. Subtopics tag and artical tag
+2. Subtopics tag and article tag
 
 ### Avatar Engine

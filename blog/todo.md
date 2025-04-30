@@ -6,8 +6,9 @@ When you gaze into the blogs, they become shy.
 
 - side navigator reflecting process of reading (done)
 - cheaper DOM handling
-- scripts for replacing math formula with rendered static images in markdown source file
+- scripts for replacing math formula with rendered static images in markdown source file (done)
 - blog path tree for navigation (done)
+- add obsidian handler for tag annotation
 
 ### Side Navigator
 
@@ -31,11 +32,11 @@ Or maybe compile to html first, then we could minimize the computing time.
 Mathematical formula and equations are normal in blogs, the best way now I know
 is that to compile these formula and set it with a `<img />` label. Wikipedia does this, and some of the symbols just using the symbol set characters, since some equations are simple.
 
-### Blog Path Tree For navigtaion
+### Blog Path Tree For navigation
 
 Every time when I will write over a new blog, I'd like to just throw it into one
 category, and it should be capable to detect new blog in. 
-However, the index to these blogs is essential, to tell the browser which blogs are accessable. In a client-server model, the server handles requests and send back according to a database.
+However, the index to these blogs is essential, to tell the browser which blogs are accessible. In a client-server model, the server handles requests and send back according to a database.
 For gitpages, we could set a file to store the index, taking the place of database. That's what `scan.hs` does.
 
 ### Iconize the navigation
@@ -48,5 +49,8 @@ Replace `Blog` with an icon.
 
 - 2023.3.14: build basic directory-to-blog structure
 - 2023.3.16: minimal theme and icon set
+- 2025.4.30: add mathjax rendering equations
 
 ### Issues
+
+- Elm markdown libraries are not very good for equations. A better solution is still to render the markdown to HTML first then load them.

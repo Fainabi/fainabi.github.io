@@ -10,7 +10,6 @@ import Blog.SideNav as SideNav
 import Session exposing (Session)
 
 
-
 type alias Model =
     { body : Body.Model
     , sidenav : SideNav.Model
@@ -22,7 +21,7 @@ type alias Model =
 init : Session -> String -> ( Model, Cmd Msg )
 init session url =
     let
-        (body, bodyMsg) = Body.init url
+        (body, bodyMsg) = Body.init url  -- this url has encoded chars like %20 for space, the filename is encouraged to be simple
     in
         ( Model body (SideNav.init body) session url
         , Cmd.map GotBody bodyMsg)
