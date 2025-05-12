@@ -16,12 +16,16 @@ getIdx =
 view : String -> Html msg
 view model =
     let 
-        ls = getIdx model
+        ls_transcripted_whitespace = getIdx model
+        ls = List.map 
+                (\str -> String.replace "%20" " " str)
+                ls_transcripted_whitespace
         lsAcc = 
             List.map 
                 (\x -> (List.drop 1 x))
                 (scanList (\acc x -> acc ++ [x]) [] ls)
 
+        -- _ = Debug.log "ls" ls
         lsLen = List.length ls
 
         idxToClass idx = if idx + 1 == lsLen then "navidx-end" else "navidx-path"

@@ -113,8 +113,10 @@ routeTo maybeRoute model =
 
         Just Route.Home -> ( Home <| Home.init session, Cmd.none )
 
-        Just (Route.Blog blog) ->
+        Just (Route.Blog blog_with_whitespaces) ->
             let
+                blog = List.map 
+                    (\str -> String.replace "%20" " " str) blog_with_whitespaces
                 url = Url.Builder.absolute ("blog"::blog) []
             in
                 if String.endsWith ".md" url

@@ -49,7 +49,8 @@ initWithPath path s =
     let
         (model, cmd) = init s
     in
-        ({model | path = path}, cmd)
+        ({model | path = List.map 
+                (\str -> String.replace "%20" " " str) path}, cmd)
 
 init : Session -> (Model, Cmd Msg)
 init s =
@@ -169,7 +170,8 @@ update msg model =
                 Err err -> (model, Debug.log (Debug.toString err) Cmd.none)
 
         ChangePath path -> 
-            ( { model | path = path }
+            ( { model | path = List.map 
+                (\str -> String.replace "%20" " " str) path }
             , Nav.pushUrl
                 (model |> getSession |> navKey) 
                 (Url.Builder.absolute ("#/blog"::path) []))
