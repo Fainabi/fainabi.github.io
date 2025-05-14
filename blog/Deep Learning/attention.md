@@ -62,6 +62,12 @@ Softmax incurs exponential operator, which is one of the main obstacle of effici
 
 See [Linear Transformers are Secretly Fast Weight Programmers](https://arxiv.org/pdf/2102.11174)
 
+### PagedAttention
+
+### FlashAttention
+
+
+
 ## Analysis on Attention
 
 As it is mentioned at the top, attention is a method for merging context information. A common constraint is that the dimension of output is $O(1)$ (which is $d_v$ here), which means the growing context would not affect the output dimension. One may argue that, well if I memorize long long sentences as the context, the information I've got must be significantly greater than a context made form shorter sentences. That's true, but not a problem for self attention, as the output number of embeddings are kept same to inputs. 
