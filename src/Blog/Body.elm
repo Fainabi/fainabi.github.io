@@ -10,6 +10,7 @@ import Blog.Utils exposing (..)
 import Blog.Attribute exposing (ArticleAttribute)
 
 import Debug
+import Markdown.Data exposing (render)
 
 type Model 
     = Loading
@@ -72,8 +73,11 @@ view : Model -> Html Msg
 view model =
     case model of
         Article article -> 
-            Html.div [] 
-                [ Markdown.Render.toHtml Markdown.Option.Standard article.content |> Html.map MarkdownMsg ]
+            let 
+                rendered = Markdown.Render.toHtml Markdown.Option.Standard article.content
+            in 
+                Html.div [] 
+                    [ rendered |> Html.map MarkdownMsg ]
 
         Loading  -> div [] []
 

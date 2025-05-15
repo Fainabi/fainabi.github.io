@@ -31,3 +31,8 @@
 .navidx .navidx-path::after {
     content: "»";
 }
+
+.navidx a {
+    text-decoration: none;
+    color: var(--text-dark);
+}

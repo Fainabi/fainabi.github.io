@@ -31,20 +31,19 @@ Based on layer normalization, but now separate a number of groups, and normalize
 
 Unlike normalizing the inputs, weight normalization normalizes the parameters during training. It is also called (as a kind of) reparameterization. For a weight matrix $\boldsymbol{w}$, the reparametrization is
 $$ \boldsymbol{w} = \frac{g}{\|\boldsymbol{v}\|} \boldsymbol{v} $$
-for the learnable $\boldsymbol{v}$ and $g$.
-
-The gradients are
+for the learnable $\boldsymbol{v}$ and $g$. The gradients are
 $$ \nabla_g L = \frac{\nabla_\boldsymbol{w} L \cdot \boldsymbol{v}}{\|\boldsymbol{v}\|}, \quad
     \nabla_\boldsymbol{v} L = \frac{g}{\|\boldsymbol{v}\|} \nabla_\boldsymbol{w} L - \frac{g \nabla_g L}{\|\boldsymbol{v}\|^2} \boldsymbol{v} $$
-where
-$$
+Furthermore,
 \[
 \begin{align}
-\nabla_\boldsymbol{v} L &= \frac{g}{\|\boldsymbol{v}\|} \nabla_\boldsymbol{w} L - \frac{g \nabla_g L}{\|\boldsymbol{v}\|^2} \boldsymbol{v} \\
-&= 
+    \nabla_\boldsymbol{v} L &= \frac{g}{\|\boldsymbol{v}\|} \nabla_\boldsymbol{w} L - \frac{g \nabla_g L}{\|\boldsymbol{v}\|^2} \boldsymbol{v} \\
+    &= \frac{g}{\|\boldsymbol{v}\|} \left(I - \frac{\boldsymbol{w} \boldsymbol{w}^\dagger}{\|\boldsymbol{w}\|^2}\right) \nabla_\boldsymbol{w} L
 \end{align}
 \]
-$$
+which means the gradient $\nabla_\boldsymbol{v} L$ is orthogonal to $\boldsymbol{w}$, therefore $\boldsymbol{v}$. That's pretty nice to make te shape of distribution of $\boldsymbol{v}$ become a sphere.
+
+An interesting conclusion mentioned in [5] is weight normalization is equivalent to batch normalization on the pre-activations.
 
 
 ## Bibliography
