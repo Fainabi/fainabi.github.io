@@ -45,6 +45,12 @@ which means the gradient $\nabla_\boldsymbol{v} L$ is orthogonal to $\boldsymbol
 
 An interesting conclusion mentioned in [5] is weight normalization is equivalent to batch normalization on the pre-activations.
 
+### Weight Standardization
+
+Weight standardization is a fused technique of batch normalization, layer normalization and weight normalization, where the weight is parameterized as 
+$$ \hat{W} = \frac{W - \bar{W}}{\sqrt{\bar{W^2} - \bar{W}^2}} $$
+which removes parameter $g$ (as the weight is standardized). Such setting is to standardize both the parameter distribution and input distribution. The merit, as [4] points out, is the smoothness of loss landscape and avoiding elimination singularities. 
+
 
 ## Bibliography
 
