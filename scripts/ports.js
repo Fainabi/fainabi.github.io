@@ -13,15 +13,17 @@ var mathjax_macro = {
     of: ["\\left(#1\\right)", 1],
     abs: ["\\left\\lvert #1 \\right\\rvert", 1],
     norm: ["\\left\\| #1 \\right\\|", 1],
+    round: ["\\left\\lfloor #1 \\right\\rceil", 1],
 };
 const wrapping_type = {
-    mathbb: ['Z', 'N', 'Q', 'R', 'B', 'C', 'F'],
+    mathbb: ['Z', 'N', 'Q', 'R', 'B', 'C', 'F', 'H'],
     operatorname: ['Hom'],
+    mathsf: ['RLWE', 'CRT'],
 };
 // into type
 for (const key in wrapping_type) {
     for (const sym of wrapping_type[key]) {
-        mathjax_macro[sym] = `{\\${key} ${sym}}`;
+        mathjax_macro[sym] = `{\\${key}{${sym}}}`;
     }    
 }
 
@@ -37,7 +39,7 @@ const mathjax_port = () => {
       }
 
       // resolve the bug in elm markdown package
-      for (const clsname of ["innerJoin", "bracketed"]) {
+      for (const clsname of ["innerJoin", "bracketed", "X12"]) {
         var b = document.getElementsByClassName(clsname);
         while(b.length) {
             var parent = b[0].parentNode;
