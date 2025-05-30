@@ -1,43 +1,29 @@
-port module TopNav exposing (..)
+module TopNav exposing (..)
 
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onClick)
 
+import Data.Theme exposing (..)
 
-port changeTheme : String -> Cmd msg
-port loadLocalTheme : (String -> msg) -> Sub msg
 
-type Theme
-    = Light
-    | Dark
-    | OS
-
-themeString : Theme -> String
-themeString theme =
-    case theme of 
-        Light -> "Light"
-        Dark -> "Dark"
-        OS -> "OS"
 
 type alias Model =
     { theme : Theme }
 
 init : () -> Model
-init _ = Model OS
+init _ = Model Light
 
 
 type Msg
-    = ChangeTheme Theme
+    = SetTheme Theme
     | LoadLocalTheme String
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        ChangeTheme theme -> 
-            let
-               nextTheme = if theme == Light then Dark else Light 
-            in ({ model | theme = nextTheme }, changeTheme (themeString nextTheme))
+        SetTheme theme -> 
+            ({ model | theme = theme }, changeTheme (themeString theme))
         
         LoadLocalTheme str ->
             let
@@ -68,7 +54,7 @@ view model =
                                 img [id "home-logo", src logo] [text "Home"]]]
                         , a [href "/#/blog"] [ text "Blog"]]
                     , div [class "topnav-main"]
-                        [button [ onClick (ChangeTheme model.theme) ] [
+                        [button [ onClick (SetTheme (toggleTheme model.theme)) ] [
                             span [class "container"] [
                                 img [src theme] [text "Theme"]]]]
                     ]]

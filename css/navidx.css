@@ -1,0 +1,106 @@
+/* Navigation path styles */
+.navidx {
+    --navidx-height: 30px;
+    --navidx-radius: 30px;
+    
+    /* layout */
+    position: fixed;
+    top: var(--topnav-height);
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 999;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    max-width: 800px;
+    transition: all 0.3s ease-in-out;
+
+    /* default collapsed state */
+    height: var(--navidx-radius);
+    width: var(--navidx-radius);
+    border-radius: 50%;
+    background-color: var(--bg-white);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    opacity: 0.8;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.navidx::before {
+    content: '→';
+    color: var(--text-blue);
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.navidx:hover {
+    /* expanded state */
+    height: var(--navidx-height);
+    width: 100%;
+    border-radius: 0;
+    opacity: 1;
+}
+
+.navidx ol {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    height: 100%;
+    justify-content: center;
+    width: 100%;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.navidx:hover ol {
+    opacity: 1;
+}
+
+.navidx li {
+    position: relative;
+    margin: 0 8px;
+    transition: opacity 0.3s ease-in-out;
+    opacity: 0;
+}
+
+.navidx:hover li {
+    opacity: 1;
+}
+
+.navidx li:not(:last-child)::after {
+    content: '→';
+    position: absolute;
+    right: -4px;
+    color: var(--text-blue);
+}
+
+.navidx a {
+    text-decoration: none;
+    color: var(--text-dark);
+    font-size: 0.9rem;
+    padding-right: 12px;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.navidx:hover a {
+    opacity: 1;
+}
+
+.navidx-end {
+    font-weight: bold;
+    color: var(--text-blue);
+}
+
+.navidx-path {
+    color: var(--text-dark);
+}
+
+/* Add spacing for the navigation path */
+body {
+    padding-top: calc(var(--topnav-height) + var(--navidx-height));
+}

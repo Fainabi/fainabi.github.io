@@ -55,11 +55,19 @@ type Msg
 
 init : Url.Url -> Nav.Key -> (Model, Cmd Msg)
 init url key =
-    (routeTo (Route.fromUrl url) (Home <| Home.init (Session key)))
+    let
+        (homeModel, _) = Home.init (Session key)
+    in
+        (routeTo (Route.fromUrl url) (Home homeModel))
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
     case (msg, model) of
+        (GotHome homeMsg, Home homeModel) ->
+            let
+                (newHomeModel, newHomeCmd) = Home.update homeMsg homeModel
+            in
+                ( Home newHomeModel, Cmd.map GotHome newHomeCmd )
 
         (GotBlog aMsg, Blog aModel) -> 
             let
@@ -111,7 +119,11 @@ routeTo maybeRoute model =
     case maybeRoute of
         Nothing -> ( NotFound session , Cmd.none )
 
-        Just Route.Home -> ( Home <| Home.init session, Cmd.none )
+        Just Route.Home -> 
+            let
+                (homeModel, homeCmd) = Home.init session
+            in
+                ( Home homeModel, Cmd.map GotHome homeCmd )
 
         Just (Route.Blog blog_with_whitespaces) ->
             let

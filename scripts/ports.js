@@ -7,6 +7,21 @@ const theme_port = theme => {
     window.localStorage.setItem("theme", theme);
 }
 
+const scrollToTop = () => {
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
+}
+
+const toolbox_port = position => {
+    window.localStorage.setItem("toolboxPosition", JSON.stringify(position));
+}
+
+const getToolboxPosition = () => {
+    const savedPosition = window.localStorage.getItem("toolboxPosition");
+    return savedPosition ? JSON.parse(savedPosition) : { x: 50, y: 50 };
+}
 
 var mathjax_macro = {
     bm: ["{\\boldsymbol #1}", 1],
@@ -17,7 +32,7 @@ var mathjax_macro = {
 };
 const wrapping_type = {
     mathbb: ['Z', 'N', 'Q', 'R', 'B', 'C', 'F', 'H'],
-    operatorname: ['Hom'],
+    operatorname: ['Hom', 'DFT', 'CtS'],
     mathsf: ['RLWE', 'CRT'],
 };
 // into type
@@ -28,12 +43,15 @@ for (const key in wrapping_type) {
 }
 
 const mathjax_port = () => {
-    const targetNode = document.getElementsByClassName("main-blog")[0];  // main-blog is the body of blog pages
+    const targetElem = document.getElementsByClassName("main-blog")
+    if (targetElem.length == 0)
+        return;
+    const targetNode = targetElem[0];  // main-blog is the body of blog pages
     const config = { attributes: true, childList: true, subtree: true };
     const observer = new MutationObserver((mutationList, observer) => {
       // remove unnecessary span background
       for (const tag of ["span", "p", "h1", "h2", "h3", "h4", "li", "ul"]) {
-        for (var b of document.getElementsByTagName(tag)) {
+        for (var b of targetNode.getElementsByTagName(tag)) {
           b.removeAttribute("style");
         }
       }

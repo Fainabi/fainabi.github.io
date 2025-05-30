@@ -1,0 +1,20 @@
+[
+    {
+        "title": "Getting Started with Elm",
+        "description": "A comprehensive guide to learning Elm, from basic concepts to building your first application. Perfect for developers looking to explore functional programming.",
+        "date": "2024-03-15",
+        "path": ["programming", "elm", "getting-started.md"]
+    },
+    {
+        "title": "Building a Personal Blog with Elm",
+        "description": "Learn how I built this blog using Elm and modern web technologies. A deep dive into the architecture and design decisions.",
+        "date": "2024-03-10",
+        "path": ["programming", "elm", "building-blog.md"]
+    },
+    {
+        "title": "The Beauty of Functional Programming",
+        "description": "Exploring the elegance and benefits of functional programming paradigms, with practical examples and real-world applications.",
+        "date": "2024-03-05",
+        "path": ["programming", "functional", "beauty-of-fp.md"]
+    }
+] 

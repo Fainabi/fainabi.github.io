@@ -1,5 +1,7 @@
 @import url("general.css");
 @import url("topnav.css");
 @import url("article.css");
-@import url("navbar.css");
+/* @import url("navbar.css"); */
+@import url("navidx.css");
+@import url("toolbox.css");
 @import url("home.css");

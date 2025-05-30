@@ -2,6 +2,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script type="text/javascript" src="elm.min.js"></script>
   <script type="text/javascript" src="scripts/ports.js"></script>
   <link rel="stylesheet" href="css/style.css">
@@ -24,5 +25,12 @@
 
   // mathjax port
   app.ports.loadMathJax.subscribe(mathjax_port);
+
+  // position port
+  // app.ports.savePosition.subscribe(toolbox_port);
+  // app.ports.positionReceived.send(getToolboxPosition());
+
+  // scroll to top port
+  app.ports.scrollToTop.subscribe(scrollToTop);
 </script>
 </html>

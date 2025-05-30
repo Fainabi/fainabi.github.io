@@ -1,0 +1,116 @@
+/* Toolbox styles */
+.toolbox-wrapper {
+    position: fixed;
+    bottom: 50px;
+    left: 50px;
+    cursor: pointer;
+    z-index: 1000;
+    width: 150px;
+    height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.toolbox-wrapper::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background-color: transparent;
+}
+
+.toolbox {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    background-color: var(--toolbox-bg);
+    border-radius: 50%;
+    box-shadow: 0 2px 4px var(--toolbox-shadow);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.toolbox::before {
+    content: '⋮';
+    font-size: 1.2rem;
+    color: #333;
+}
+
+.toolbox-item {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    background-color: var(--toolbox-item-bg);
+    border-radius: 50%;
+    box-shadow: 0 2px 4px var(--toolbox-item-shadow);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1.2rem;
+    color: var(--toolbox-item-color);
+    transition: all 0.3s ease;
+    opacity: 0;
+}
+
+.toolbox-item:hover {
+    background-color: var(--toolbox-item-hover-bg);
+}
+
+.toolbox-item.top {
+    top: -50px;
+    left: 0px;
+    transform: translate(0px, 0px);
+}
+
+.toolbox-item.path {
+    top: 0px;
+    left: 50px;
+    transform: translate(0px, 0px);
+}
+
+.toolbox-item.theme {
+    top: -35.4px;
+    left: 35.4px;
+    transform: translate(0px, 0px);
+}
+
+.toolbox-wrapper:hover .toolbox-item {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.toolbox-wrapper:hover .toolbox-item.top {
+    transform: translate(0, -14.1px);
+}
+
+.toolbox-wrapper:hover .toolbox-item.path {
+    transform: translate(14.1px, 0);
+}
+
+.toolbox-wrapper:hover .toolbox-item.theme {
+    transform: translate(10px, -10px);
+}
+
+:root {
+    --toolbox-bg: #ffffff;
+    --toolbox-shadow: rgba(0, 0, 0, 0.1);
+    --toolbox-item-bg: #ffffff;
+    --toolbox-item-shadow: rgba(0, 0, 0, 0.1);
+    --toolbox-item-color: #333;
+    --toolbox-item-hover-bg: #f0f0f0;
+}
+
+body.dark {
+    --toolbox-bg: #1a1a1a;
+    --toolbox-shadow: rgba(255, 255, 255, 0.1);
+    --toolbox-item-bg: #2d2d2d;
+    --toolbox-item-shadow: rgba(255, 255, 255, 0.1);
+    --toolbox-item-color: #ffffff;
+    --toolbox-item-hover-bg: #333333;
+}
