@@ -1,0 +1,7 @@
+{
+  "projectId": "ee421881-aa28-4c71-ac42-600f471b2515",
+  "createdAt": 1770541468878,
+  "startupCommands": [
+    "python scan.py; python -m http.server 3000"
+  ]
+}
