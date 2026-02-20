@@ -1,5 +1,23 @@
 # CKKS
 
+:::meta
+title : H​omomorphic Encryptions for A​rithmetic of A​pproximate N​umbers
+authors : Jung Hee Cheon, Andrey Kim, Miran Kim, Yong Soo Song
+publication : ASIACRYPT 2017
+reference : AC:CKKS17
+url : https://doi.org/10.1007/978-3-319-70694-8_15
+tags : FHE, lattice, approximate arithmetic
+:::
+
+:::flashcards
+$\mathcal{R}$ : Cyclotomic ring $\Z[X]/(X^N + 1)$
+$\sigma$ : Canonical embedding map
+$\Delta$ : Encoding/scaling factor
+$\H$ : Conjugation-symmetric subspace of $\C^N$
+$\CRT$ : CRT matrix $(\zeta^{ij})$
+$\zeta$ : Primitive root of unity $e^{-2\pi i / N}$
+:::
+
 CKKS is an acronym of the authors (Cheon-Kim-Kim-Song) representing the work about $\underline{\text{h}}$omomorphic $\underline{\text{e}}$ncryptions for $\underline{\text{a}}$rithmetic of $\underline{\text{a}}$pproximate $\underline{\text{n}}$umbers (aka HEAAN). The key concept of CKKS scheme is to take noise in FHE as a part of message. Each message is therefore representing a (somehow) fixed-point number w.r.t an encoding factor $\Delta$. In this file, the cyclotomic ring is \(R = \Z[X]/(X^N + 1)\) for $N$ is a power of two and $M = 2N$.
 
 ## Encoding/Decoding
@@ -15,10 +33,10 @@ The most important part of CKKS is its encoding method, to pack a bunch of compl
 
 The elements in $\C^{N/2}$ are said in slots, as each number take a position in the vector. In order to perform element-wise addition and multiplication, CKKS relies on the CRT decoding, which is represented by the canonical embedding map 
 \[
-\begin{align}
+\begin{aligned}
 \sigma: \mathcal{R} &\longrightarrow \C^N \\
             m(X) &\mapsto (m(\zeta^i))_{i \in \Z_N^\ast}
-\end{align}
+\end{aligned}
 \]
 where $\zeta = e^{\frac{-2 \pi i}{N}}$. Noticing that for a polynomial $\sigma(\zeta^{-i}) = \overline{\sigma(\zeta^i)}$, therefore $\sigma(R)$ is a symmetric space (in the meaning of conjugation). Such space is defined as:
 $$ 
@@ -43,10 +61,7 @@ CKKS is a family of lattice ciphertext, following the standard Regev encryption 
 $$ (a, b = - a s + m + e) \in \mathcal{R}^2_Q. $$
 Decryption is $b + a s$, where $e$ the error is absorbed by the message.
 
-
-
-## Bibliography
-
-1. Jung Hee Cheon, Andrey Kim, Miran Kim, Yong Soo Song: Homomorphic Encryption for Arithmetic of Approximate Numbers. ASIACRYPT (1) 2017: 409-437. EPRINT: 2016/421
-
-2. Jung Hee Cheon, Kyoohyung Han, Andrey Kim, Miran Kim, Yongsoo Song: Bootstrapping for Approximate Homomorphic Encryption. EUROCRYPT (1) 2018: 360-384. EPRINT: 2018/153
+:::interests
+Homomorphic operations
+Noise Analysis
+:::
