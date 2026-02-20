@@ -197,11 +197,11 @@ export function PlotChart({ config }: PlotChartProps) {
           />
           <Legend
             wrapperStyle={{ fontSize: 13 }}
-            payload={fns.map((f, i) => ({
+            {...{ payload: fns.map((f, i) => ({
               value: f.label,
               type: "line" as const,
               color: COLORS[i % COLORS.length],
-            }))}
+            })) }}
           />
           {fns.map((f, i) => (
             <Line
