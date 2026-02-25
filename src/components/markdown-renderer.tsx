@@ -6,6 +6,12 @@ import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import rehypeRaw from "rehype-raw";
 import rehypeSlug from "rehype-slug";
+import { useTheme } from "next-themes";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import {
+  oneDark,
+  oneLight,
+} from "react-syntax-highlighter/dist/esm/styles/prism";
 import { macros } from "@/lib/katex-macros";
 import { preprocessPlots, type PlotConfig } from "@/lib/plot";
 import { preprocessSnippets, type SnippetConfig } from "@/lib/snippet";
@@ -47,7 +53,11 @@ function childrenToString(children: React.ReactNode): string | null {
  * language-plot / language-snippet and renders the appropriate widget
  * instead of a `<pre><code>` listing.
  */
-function PreBlock({ children, ...rest }: ComponentPropsWithoutRef<"pre">) {
+interface PreBlockProps extends ComponentPropsWithoutRef<"pre"> {
+  isDarkTheme: boolean;
+}
+
+function PreBlock({ children, isDarkTheme, ...rest }: PreBlockProps) {
   // react-markdown renders fenced blocks as <pre><code class="language-xxx">...</code></pre>
   const codeEl = React.Children.toArray(children).find(
     (child): child is React.ReactElement =>
@@ -57,8 +67,9 @@ function PreBlock({ children, ...rest }: ComponentPropsWithoutRef<"pre">) {
   if (codeEl) {
     const lang = codeEl.props.className;
     const text = childrenToString(codeEl.props.children);
+    const language = lang?.replace(/^language-/, "");
 
-    if (text) {
+    if (text && language) {
       if (lang === "language-plot") {
         try {
           const config: PlotConfig = JSON.parse(text);
@@ -79,6 +90,36 @@ function PreBlock({ children, ...rest }: ComponentPropsWithoutRef<"pre">) {
           return <CalloutBlock config={config} />;
         } catch { /* fall through */ }
       }
+
+      return (
+        <SyntaxHighlighter
+          language={language}
+          style={isDarkTheme ? oneDark : oneLight}
+          PreTag="div"
+          customStyle={{
+            margin: 0,
+            borderRadius: "0.5rem",
+            border: "1px solid var(--border)",
+            background: "var(--muted)",
+            padding: "1rem",
+            overflowX: "auto",
+            fontSize: "0.875rem",
+            lineHeight: "1.7",
+          }}
+          codeTagProps={{
+            style: {
+              fontFamily: "var(--font-mono)",
+              margin: 0,
+              padding: 0,
+              display: "block",
+              textIndent: 0,
+              whiteSpace: "pre",
+            },
+          }}
+        >
+          {text.replace(/\n$/, "")}
+        </SyntaxHighlighter>
+      );
     }
   }
 
@@ -86,6 +127,9 @@ function PreBlock({ children, ...rest }: ComponentPropsWithoutRef<"pre">) {
 }
 
 export function MarkdownRenderer({ content, skipCallouts }: MarkdownRendererProps) {
+  const { resolvedTheme } = useTheme();
+  const isDarkTheme = resolvedTheme === "dark";
+
   const withCallouts = skipCallouts ? content : preprocessCallouts(content);
   const withSnippets = preprocessSnippets(withCallouts);
   const withPlots = preprocessPlots(withSnippets);
@@ -102,7 +146,7 @@ export function MarkdownRenderer({ content, skipCallouts }: MarkdownRendererProp
           [rehypeKatex, { macros, strict: false, trust: true }],
         ]}
         components={{
-          pre: PreBlock,
+          pre: (props) => <PreBlock {...props} isDarkTheme={isDarkTheme} />,
         }}
       >
         {withEqRefs}

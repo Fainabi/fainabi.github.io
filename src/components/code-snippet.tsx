@@ -2,6 +2,12 @@
 
 import { useState } from "react";
 import { ChevronRight, Code2, Copy, Check } from "lucide-react";
+import { useTheme } from "next-themes";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import {
+  oneDark,
+  oneLight,
+} from "react-syntax-highlighter/dist/esm/styles/prism";
 import type { SnippetConfig } from "@/lib/snippet";
 
 interface CodeSnippetProps {
@@ -12,9 +18,15 @@ export function CodeSnippet({ config }: CodeSnippetProps) {
   const { language, title, code } = config;
   const [open, setOpen] = useState(false);
   const [copied, setCopied] = useState(false);
+  const { resolvedTheme } = useTheme();
+  const isDarkTheme = resolvedTheme === "dark";
+  const normalizedCode = code
+    .replace(/\r\n?/g, "\n")
+    .replace(/^ (?=\S)/, "")
+    .replace(/\n$/, "");
 
   const handleCopy = async () => {
-    await navigator.clipboard.writeText(code);
+    await navigator.clipboard.writeText(normalizedCode);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -60,9 +72,31 @@ export function CodeSnippet({ config }: CodeSnippetProps) {
               )}
             </button>
 
-            <pre className="overflow-x-auto p-4 leading-relaxed">
-              <code className={`language-${language}`}>{code}</code>
-            </pre>
+            <SyntaxHighlighter
+              language={language}
+              style={isDarkTheme ? oneDark : oneLight}
+              PreTag="div"
+              customStyle={{
+                margin: 0,
+                padding: "1rem",
+                background: "var(--muted)",
+                borderRadius: 0,
+                fontSize: "0.875rem",
+                lineHeight: "1.7",
+              }}
+              codeTagProps={{
+                style: {
+                  fontFamily: "var(--font-mono)",
+                  margin: 0,
+                  padding: 0,
+                  display: "block",
+                  textIndent: 0,
+                  whiteSpace: "pre",
+                },
+              }}
+            >
+              {normalizedCode}
+            </SyntaxHighlighter>
           </div>
         </div>
       </div>
