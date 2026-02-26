@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getBlogIndex, separateCatBlog, nameToSlug, formatChildCounts, getArticleMetasAtPath, getDirectoryReadme } from "@/lib/blog";
 import { MarkdownRenderer } from "@/components/markdown-renderer";
+import { QuickviewRenderer } from "@/components/quickview-renderer";
 import {
   Card,
   CardHeader,
@@ -83,6 +84,11 @@ export default function BlogIndexPage() {
                       </div>
                     )}
                   </div>
+                  {meta?.quickview && (
+                    <div className="ml-auto shrink-0 pl-3 text-right text-sm text-muted-foreground">
+                      <QuickviewRenderer content={meta.quickview} />
+                    </div>
+                  )}
                 </Link>
               );
             })}

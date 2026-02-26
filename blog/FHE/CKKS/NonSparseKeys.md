@@ -7,6 +7,7 @@ publication : EUROCRYPT 2021
 reference : EC:BMTH21
 url : https://doi.org/10.1007/978-3-030-77870-5_21, https://eprint.iacr.org/2020/1203
 tags : FHE, CKKS, Bootstrapping
+quickview : $\ModDown\Bigg(\sum_{i} [a]_{D_i} \cdot \underbrace{\of{P \cdot s' \cdot 1_{D_i}}}_{\RLWE}\Bigg)$
 :::
 
 Double-hoisting and the improved hybrid key-switching contribute to improvement on linear transformation. Furthermore, the `repacking` techinuqe for `CtS` combines iDFT evaluation and real/imaginary parts separation so that the level consumption is reduced. The homomorphic polynomial evaluation is also optimized, in depth and scale.

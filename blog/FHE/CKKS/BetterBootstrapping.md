@@ -6,7 +6,8 @@ authors : Kyoohyung Han and Dohyeong Ki
 publication : CT-RSA 2020
 reference : CT-RSA:HK20
 url : https://doi.org/10.1007/978-3-030-40186-3_16, https://eprint.iacr.org/2019/688
-tags : FHE, CKKS, Bootstrapping
+tags : FHE, CKKS, Bootstrapping, Hybrid Key-switching
+quickview : $\ModDown\Bigg(\sum_{i} [a]_{D_i} \cdot [\hat{D}_i^{-1}]_{D_i} \cdot \underbrace{\of{P \cdot s' \cdot {\hat{D}_i}}}_{\RLWE}\Bigg)$
 :::
 
 :::flashcards
@@ -17,7 +18,7 @@ $[k]$ : set of $\{0, 1, \cdots, k - 1\}$
 $\RLWE_{s}(m)$ : RLWE ciphertexts encrypting $m$ under $s$
 :::
 
-This work synthesises the previous CKKS RNS [[SAC:CHKKS18]](CKKS-RNS.md) and RNS decomposition [[SAC:BEHZ16]](../BGV-and-BFV/FV-RNS.md), and introduces a key-switching method with the decomposition number between 1 and $\ell$.
+This work synthesizes the previous CKKS RNS [[SAC:CHKKS18]](CKKS-RNS.md) and RNS decomposition [[SAC:BEHZ16]](../BGV-and-BFV/FV-RNS.md), and introduces a key-switching method with the decomposition number between 1 and $\ell$.
 
 The sine function is also better approximated.
 

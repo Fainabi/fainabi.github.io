@@ -5,6 +5,7 @@ export interface ArticleMeta {
   authors?: string;
   publication?: string;
   reference?: string;
+  quickview?: string;
   urls?: string[];
   tags?: string[];
 }
@@ -47,6 +48,9 @@ export function extractMeta(md: string): {
         case "reference":
           meta.reference = value;
           break;
+        case "quickview":
+          meta.quickview = value;
+          break;
         case "url":
           meta.urls = value.split(",").map((u) => u.trim()).filter(Boolean);
           break;
@@ -69,6 +73,7 @@ export function hasMetaContent(meta: ArticleMeta): boolean {
     meta.authors ||
     meta.publication ||
     meta.reference ||
+    meta.quickview ||
     (meta.urls && meta.urls.length > 0) ||
     (meta.tags && meta.tags.length > 0)
   );

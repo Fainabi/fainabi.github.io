@@ -24,7 +24,7 @@ const wrappingTypes: Record<string, string[]> = {
     "RLWE", 
     "CRT", "ModRaise", "DFT", "iDFT", "CtS", "StC", "EvalMod", 
     "Conv", "ModUp", "ModDown", "PartialSum", "swk", "evk",
-    "ct", "real", "imag",
+    "ct", "real", "imag", "SubSum",
   ],
 };
 

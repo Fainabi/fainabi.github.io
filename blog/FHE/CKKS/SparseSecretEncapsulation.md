@@ -6,6 +6,7 @@ publication : ACNS 2022
 reference : ACNS:BTH22
 url : https://doi.org/10.1007/978-3-319-70694-8_15, https://eprint.iacr.org/2022/024.pdf
 tags : FHE, CKKS, Bootstrapping
+quickview : $\mathsf{KS}_{s \rightarrow s'} \rightarrow \ModRaise \rightarrow \mathsf{KS}_{s' \rightarrow s}$
 :::
 
 :::flashcards

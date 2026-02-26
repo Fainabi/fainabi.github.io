@@ -7,6 +7,7 @@ publication : EUROCRYPT 2018
 reference : EC:CHKKS18
 url : https://link.springer.com/chapter/10.1007/978-3-319-78381-9_14, https://eprint.iacr.org/2018/153
 tags : FHE, CKKS, Bootstrapping
+quickview : $\ModRaise \rightarrow \PartialSum \rightarrow \CtS \rightarrow \EvalMod \rightarrow \StC$
 :::
 
 :::flashcards

@@ -7,6 +7,7 @@ publication : EUROCRYPT 2019
 reference : EC:CCS19
 url : https://doi.org/10.1007/978-3-030-17656-3_2, https://eprint.iacr.org/2018/1043
 tags : FHE, CKKS, Bootstrapping, DFT factorization, Chebyshev
+quickview : $U_{\DFT} = U_{d-1} \circ \cdots \circ U_1 \circ U_0$
 :::
 
 :::flashcards

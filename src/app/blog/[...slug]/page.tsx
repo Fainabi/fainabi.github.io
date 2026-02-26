@@ -13,6 +13,7 @@ import {
 } from "@/lib/blog";
 import { BlogBreadcrumb } from "@/components/blog-breadcrumb";
 import { MarkdownRenderer } from "@/components/markdown-renderer";
+import { QuickviewRenderer } from "@/components/quickview-renderer";
 import { TocSidebar } from "@/components/toc-sidebar";
 import { FlashcardSidebar } from "@/components/flashcard-sidebar";
 import { ArticleMetaBanner } from "@/components/article-meta-banner";
@@ -163,6 +164,11 @@ export default async function BlogSlugPage({ params }: BlogSlugPageProps) {
                       </div>
                     )}
                   </div>
+                  {meta?.quickview && (
+                    <div className="ml-auto shrink-0 pl-3 text-right text-sm text-muted-foreground">
+                      <QuickviewRenderer content={meta.quickview} />
+                    </div>
+                  )}
                 </Link>
               );
             })}
