@@ -8,6 +8,7 @@ export interface ArticleMeta {
   quickview?: string;
   urls?: string[];
   tags?: string[];
+  attributes?: string[];
 }
 
 // ── Parser ─────────────────────────────────────────────────────────
@@ -56,6 +57,13 @@ export function extractMeta(md: string): {
           break;
         case "tags":
           meta.tags = value.split(",").map((t) => t.trim()).filter(Boolean);
+          break;
+        case "attributes":
+        case "attribute":
+          meta.attributes = value
+            .split(",")
+            .map((a) => a.trim().toLowerCase())
+            .filter(Boolean);
           break;
       }
     }

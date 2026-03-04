@@ -1,20 +1,59 @@
 [
-    {
-        "title": "Getting Started with Elm",
-        "description": "A comprehensive guide to learning Elm, from basic concepts to building your first application. Perfect for developers looking to explore functional programming.",
-        "date": "2024-03-15",
-        "path": ["programming", "elm", "getting-started.md"]
-    },
-    {
-        "title": "Building a Personal Blog with Elm",
-        "description": "Learn how I built this blog using Elm and modern web technologies. A deep dive into the architecture and design decisions.",
-        "date": "2024-03-10",
-        "path": ["programming", "elm", "building-blog.md"]
-    },
-    {
-        "title": "The Beauty of Functional Programming",
-        "description": "Exploring the elegance and benefits of functional programming paradigms, with practical examples and real-world applications.",
-        "date": "2024-03-05",
-        "path": ["programming", "functional", "beauty-of-fp.md"]
-    }
-] 
+  {
+    "title": "SSH",
+    "description": "Use SSH so `git pull` and `git push` can authenticate with your key instead of username/password or PAT every time.",
+    "date": "2026-03-04",
+    "path": [
+      "Tools",
+      "Git",
+      "SSH.md"
+    ]
+  },
+  {
+    "title": "Mein Cat",
+    "description": "**Mein Cat** is a playful double entendre: a nod to *Mind* and a wink to *Category Theory*.",
+    "date": "2026-03-01",
+    "path": [
+      "Cat",
+      "Mein Cat.md"
+    ]
+  },
+  {
+    "title": "OpenClaw",
+    "description": "Latest blog article.",
+    "date": "2026-02-28",
+    "path": [
+      "AI",
+      "Platforms",
+      "OpenClaw.md"
+    ]
+  },
+  {
+    "title": "Dify",
+    "description": "Dify AI (dify.ai) is a code-less platform which builds AI workflow by integrating AI api setting and interactive workflow controlling.",
+    "date": "2026-02-28",
+    "path": [
+      "AI",
+      "Platforms",
+      "Dify.md"
+    ]
+  },
+  {
+    "title": "Coequalizer",
+    "description": "$X \\stackrel{f}{\\underset{g}{\\rightrightarrows}} Y \\stackrel{p}{\\rightarrow} \\text{coeq}$",
+    "date": "2026-02-25",
+    "path": [
+      "Cat",
+      "Coequalizer.md"
+    ]
+  },
+  {
+    "title": "Equalizer",
+    "description": "$\\text{eq} \\stackrel{e}{\\rightarrow} X \\stackrel{f}{\\underset{g}{\\rightrightarrows}} Y$",
+    "date": "2026-02-25",
+    "path": [
+      "Cat",
+      "Equalizer.md"
+    ]
+  }
+]

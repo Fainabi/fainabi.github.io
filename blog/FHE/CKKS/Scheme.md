@@ -7,6 +7,7 @@ publication : ASIACRYPT 2017
 reference : AC:CKKS17
 url : https://doi.org/10.1007/978-3-319-70694-8_15
 tags : FHE, lattice, approximate arithmetic
+quickview : Rescale($\ct$) = $\round{\frac{1}{q}\cdot \ct}$
 :::
 
 :::flashcards

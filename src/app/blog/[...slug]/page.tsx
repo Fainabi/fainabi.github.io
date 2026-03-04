@@ -10,6 +10,7 @@ import {
   formatChildCounts,
   getArticleMetasAtPath,
   getDirectoryReadme,
+  partitionArticlesByPinned,
 } from "@/lib/blog";
 import { BlogBreadcrumb } from "@/components/blog-breadcrumb";
 import { MarkdownRenderer } from "@/components/markdown-renderer";
@@ -28,7 +29,7 @@ import {
   CardDescription,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Folder, FileText } from "lucide-react";
+import { Folder, FileText, Pin } from "lucide-react";
 
 interface BlogSlugPageProps {
   params: Promise<{ slug: string[] }>;
@@ -86,6 +87,7 @@ export default async function BlogSlugPage({ params }: BlogSlugPageProps) {
 
   const { categories, articles } = separateCatBlog(topics);
   const articleMetas = getArticleMetasAtPath(realNames, articles);
+  const { pinned, regular } = partitionArticlesByPinned(articles, articleMetas);
   const displayName = realNames.length > 0 ? realNames[realNames.length - 1] : slug[slug.length - 1];
   const readme = getDirectoryReadme(realNames);
 
@@ -126,13 +128,66 @@ export default async function BlogSlugPage({ params }: BlogSlugPageProps) {
         </section>
       )}
 
-      {articles.length > 0 && (
+      {pinned.length > 0 && (
+        <section className="mb-10">
+          <h2 className="mb-4 text-lg font-semibold text-muted-foreground">
+            <span className="inline-flex items-center gap-2">
+              <Pin className="h-4 w-4" />
+              Pinned
+            </span>
+          </h2>
+          <div className="space-y-2">
+            {pinned.map((article) => {
+              const meta = articleMetas.get(article.name);
+              return (
+                <Link
+                  key={article.name}
+                  href={`/blog/${[...slug, nameToSlug(article.name)].join("/")}`}
+                  className="flex items-start gap-3 rounded-lg border p-3 transition-colors hover:bg-muted"
+                >
+                  <FileText className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-2">
+                      <span>{article.name.replace(/\.md$/, "")}</span>
+                      {meta?.reference && (
+                        <span className="font-mono text-xs text-muted-foreground">
+                          [{meta.reference}]
+                        </span>
+                      )}
+                    </div>
+                    {meta?.tags && meta.tags.length > 0 && (
+                      <div className="mt-1 flex flex-wrap gap-1">
+                        {meta.tags.map((tag) => (
+                          <Badge
+                            key={tag}
+                            variant="secondary"
+                            className="text-xs"
+                          >
+                            {tag}
+                          </Badge>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                  {meta?.quickview && (
+                    <div className="ml-auto shrink-0 pl-3 text-right text-sm text-muted-foreground">
+                      <QuickviewRenderer content={meta.quickview} />
+                    </div>
+                  )}
+                </Link>
+              );
+            })}
+          </div>
+        </section>
+      )}
+
+      {regular.length > 0 && (
         <section>
           <h2 className="mb-4 text-lg font-semibold text-muted-foreground">
             Articles
           </h2>
           <div className="space-y-2">
-            {articles.map((article) => {
+            {regular.map((article) => {
               const meta = articleMetas.get(article.name);
               return (
                 <Link

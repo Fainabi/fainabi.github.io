@@ -11,6 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { ArrowRight } from "lucide-react";
 import { nameToSlug } from "@/lib/blog";
 import type { FeaturedPost } from "@/lib/blog";
+import { QuickviewRenderer } from "@/components/quickview-renderer";
 
 interface FeaturedPostsProps {
   posts: FeaturedPost[];
@@ -20,7 +21,7 @@ export function FeaturedPosts({ posts }: FeaturedPostsProps) {
   return (
     <section className="mt-16">
       <h2 className="mb-8 text-center text-2xl font-bold tracking-tight">
-        Featured Posts
+        Latest Posts
       </h2>
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {posts.map((post) => {
@@ -30,7 +31,9 @@ export function FeaturedPosts({ posts }: FeaturedPostsProps) {
               <Card className="h-full transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-lg">
                 <CardHeader>
                   <CardTitle className="text-xl">{post.title}</CardTitle>
-                  <CardDescription>{post.description}</CardDescription>
+                  <CardDescription>
+                    <QuickviewRenderer content={post.description} />
+                  </CardDescription>
                 </CardHeader>
                 <CardContent className="flex-1" />
                 <CardFooter className="flex items-center justify-between">

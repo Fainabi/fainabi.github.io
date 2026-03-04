@@ -29,6 +29,11 @@ export interface Heading {
   slug: string;
 }
 
+export interface PartitionedArticles {
+  pinned: BlogTopic[];
+  regular: BlogTopic[];
+}
+
 // ── Paths ──────────────────────────────────────────────────────────
 
 const BLOG_DIR = path.join(process.cwd(), "blog");
@@ -232,6 +237,36 @@ export function getArticleMetasAtPath(
     if (meta) map.set(article.name, meta);
   }
   return map;
+}
+
+function articleDisplayName(article: BlogTopic, meta?: ArticleMeta): string {
+  return (meta?.title ?? article.name.replace(/\.(md|org)$/i, "")).toLowerCase();
+}
+
+export function hasArticleAttribute(meta: ArticleMeta | undefined, attribute: string): boolean {
+  if (!meta?.attributes || meta.attributes.length === 0) return false;
+  const target = attribute.trim().toLowerCase();
+  return meta.attributes.some((attr) => attr.toLowerCase() === target);
+}
+
+export function partitionArticlesByPinned(
+  articles: BlogTopic[],
+  articleMetas: Map<string, ArticleMeta>
+): PartitionedArticles {
+  const pinned = articles.filter((article) =>
+    hasArticleAttribute(articleMetas.get(article.name), "pinned")
+  );
+  const regular = articles.filter(
+    (article) => !hasArticleAttribute(articleMetas.get(article.name), "pinned")
+  );
+
+  pinned.sort((a, b) =>
+    articleDisplayName(a, articleMetas.get(a.name)).localeCompare(
+      articleDisplayName(b, articleMetas.get(b.name))
+    )
+  );
+
+  return { pinned, regular };
 }
 
 // ── Static params generation ───────────────────────────────────────

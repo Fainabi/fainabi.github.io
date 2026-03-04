@@ -7,6 +7,7 @@ publication : CCS WAHC 23
 reference : WAHC:HSS23
 url : https://dl.acm.org/doi/10.1145/3605759.3625263, https://eprint.iacr.org/2023/1328
 tags : CKKS, Key-switch, CRT
+quickview : $1_{D_i} + 1_{D_j} = 1_{D_i \cup D_j}$
 :::
 
 The Chinese Remainder Theorem (CRT) in RNS system forms a decompose-and-innerproduct paradiagm for key-switching, as in [[SAC:CHKKS18]](CKKS-RNS.md), [[CT-RSA:HK20]](BetterBootstrapping.md), and [[EC:BMTH21]](NonSparseKeys.md). Formally speaking, the CRT reconstruction is to compute
