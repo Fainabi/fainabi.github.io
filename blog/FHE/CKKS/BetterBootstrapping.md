@@ -12,8 +12,8 @@ quickview : $\ModDown\Bigg(\sum_{i} [a]_{D_i} \cdot [\hat{D}_i^{-1}]_{D_i} \cdot
 
 :::flashcards
 $\ell$ : ciphertext level in RNS
-$\alpha$ : length of moduli chain for each decomposed groups
-$\beta$ : number of groups of decomposition
+$\alpha$ : length of moduli chain for each decomposed groups, usually $\ceil{L/\dnum}$
+$\beta$ : number of groups of decomposition, $\ceil{(\ell+1)/\alpha}$
 $[k]$ : set of $\{0, 1, \cdots, k - 1\}$
 $\RLWE_{s}(m)$ : RLWE ciphertexts encrypting $m$ under $s$
 :::
@@ -33,7 +33,7 @@ Therefore, to compute $a \cdot s'$ when computing key switching from $s'$ to $s$
 $$
 \sum_{i=0}^{\ell} [a]_{q_i} \cdot [s]_{q_i}  \cdot [\hat{q}_i^{-1}]_{q_i} \cdot \hat{q}_i = \ip{\underbrace{\{[a]_{q_i} \cdot [\hat{q}_i^{-1}]_{q_i}\}_i}_{\mathsf{Decomp}} , \underbrace{\{s_i \cdot \hat{q}_i\}_i}_{\mathsf{Powers}} }
 $$
-That makes the switching keys to be a set of $\beta = \ceil{\ell / \alpha}$ RLWE ciphertexts
+That makes the switching keys to be a set of $\beta = \ceil{(\ell+1) / \alpha}$ RLWE ciphertexts
 $$
 \evk_i \in \RLWE_{s}(P \cdot s' \cdot \hat{Q}_j), \forall i \in [\beta] \quad \text{ where } \hat{Q}_j = Q/Q_j, Q_j = \prod_{i=j\alpha}^{j\alpha+\alpha-1} q_i
 $$

@@ -1,5 +1,14 @@
 [
   {
+    "title": "Four-Part Harmony",
+    "description": "Below are common chord connections in C major with figured bass and basic SATB realizations.",
+    "date": "2026-03-04",
+    "path": [
+      "Music Composition",
+      "Four-Part Harmony.md"
+    ]
+  },
+  {
     "title": "SSH",
     "description": "Use SSH so `git pull` and `git push` can authenticate with your key instead of username/password or PAT every time.",
     "date": "2026-03-04",
@@ -45,15 +54,6 @@
     "path": [
       "Cat",
       "Coequalizer.md"
-    ]
-  },
-  {
-    "title": "Equalizer",
-    "description": "$\\text{eq} \\stackrel{e}{\\rightarrow} X \\stackrel{f}{\\underset{g}{\\rightrightarrows}} Y$",
-    "date": "2026-02-25",
-    "path": [
-      "Cat",
-      "Equalizer.md"
     ]
   }
 ]

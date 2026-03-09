@@ -16,16 +16,20 @@ import { macros } from "@/lib/katex-macros";
 import { preprocessPlots, type PlotConfig } from "@/lib/plot";
 import { preprocessSnippets, type SnippetConfig } from "@/lib/snippet";
 import { preprocessCallouts, type CalloutConfig } from "@/lib/callout";
+import { preprocessSkills, type SkillConfig } from "@/lib/skill";
 import { preprocessEquationRefs } from "@/lib/equation-ref";
 import { PlotChart } from "@/components/plot-chart";
 import { CodeSnippet } from "@/components/code-snippet";
 import { CalloutBlock } from "@/components/callout-block";
+import { SkillBlock } from "@/components/skill-block";
 import React, { type ComponentPropsWithoutRef } from "react";
 
 interface MarkdownRendererProps {
   content: string;
   /** Skip callout preprocessing (used internally to prevent infinite nesting). */
   skipCallouts?: boolean;
+  /** Skip skill preprocessing (used internally to prevent infinite nesting). */
+  skipSkills?: boolean;
 }
 
 /**
@@ -91,6 +95,13 @@ function PreBlock({ children, isDarkTheme, ...rest }: PreBlockProps) {
         } catch { /* fall through */ }
       }
 
+      if (lang === "language-skill") {
+        try {
+          const config: SkillConfig = JSON.parse(text);
+          return <SkillBlock config={config} />;
+        } catch { /* fall through */ }
+      }
+
       return (
         <SyntaxHighlighter
           language={language}
@@ -126,12 +137,13 @@ function PreBlock({ children, isDarkTheme, ...rest }: PreBlockProps) {
   return <pre {...rest}>{children}</pre>;
 }
 
-export function MarkdownRenderer({ content, skipCallouts }: MarkdownRendererProps) {
+export function MarkdownRenderer({ content, skipCallouts, skipSkills }: MarkdownRendererProps) {
   const { resolvedTheme } = useTheme();
   const isDarkTheme = resolvedTheme === "dark";
 
   const withCallouts = skipCallouts ? content : preprocessCallouts(content);
-  const withSnippets = preprocessSnippets(withCallouts);
+  const withSkills = skipSkills ? withCallouts : preprocessSkills(withCallouts);
+  const withSnippets = preprocessSnippets(withSkills);
   const withPlots = preprocessPlots(withSnippets);
   const normalized = normalizeMathDelimiters(withPlots);
   const withEqRefs = preprocessEquationRefs(normalized);
@@ -147,6 +159,55 @@ export function MarkdownRenderer({ content, skipCallouts }: MarkdownRendererProp
         ]}
         components={{
           pre: (props) => <PreBlock {...props} isDarkTheme={isDarkTheme} />,
+          p: ({ children }) => {
+            const nodes = React.Children.toArray(children).filter(
+              (node) => !(typeof node === "string" && node.trim() === "")
+            );
+            if (nodes.length === 1) {
+              const only = nodes[0];
+              if (
+                React.isValidElement(only) &&
+                only.type === "img" &&
+                typeof only.props.src === "string" &&
+                only.props.src.startsWith("/generated/lilypond/")
+              ) {
+                const modeRaw = String(only.props.alt ?? "").split("|")[1];
+                const mode = (modeRaw ?? "block").trim().toLowerCase();
+                if (mode !== "inline") {
+                  return <>{children}</>;
+                }
+              }
+            }
+            return <p>{children}</p>;
+          },
+          img: ({ src, alt, className, ...props }) => {
+            const imageSrc = typeof src === "string" ? src : "";
+            const isLilypond = imageSrc.startsWith("/generated/lilypond/");
+            if (isLilypond) {
+              const [label, modeRaw] = (alt ?? "LilyPond score|block").split("|");
+              const mode =
+                modeRaw === "inline" || modeRaw === "fullpage" ? modeRaw : "block";
+              const modeClass =
+                mode === "inline"
+                  ? "lilypond-score lilypond-score-inline inline-block align-middle h-auto w-auto max-h-10"
+                  : mode === "fullpage"
+                    ? "lilypond-score lilypond-score-fullpage relative left-1/2 block h-auto w-screen max-w-none -translate-x-1/2"
+                    : "lilypond-score lilypond-score-block mx-auto block h-auto w-auto max-w-full my-0";
+
+              // eslint-disable-next-line @next/next/no-img-element
+              return (
+                <img
+                  src={imageSrc}
+                  alt={label}
+                  className={[modeClass, className].filter(Boolean).join(" ")}
+                  {...props}
+                />
+              );
+            }
+
+            // eslint-disable-next-line @next/next/no-img-element
+            return <img src={imageSrc} alt={alt ?? ""} className={className} {...props} />;
+          },
         }}
       >
         {withEqRefs}

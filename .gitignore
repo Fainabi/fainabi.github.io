@@ -43,3 +43,6 @@ next-env.d.ts
 .playground/
 .vscode/
 .orchids/
+.interactive/
+__pycache__/
+.cursor

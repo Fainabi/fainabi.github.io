@@ -154,6 +154,14 @@
   line-height: 1.75;
 }
 
+/* Tight paragraph spacing around non-inline LilyPond scores. */
+.prose p:has(> img.lilypond-score-block),
+.prose p:has(> img.lilypond-score-fullpage) {
+  margin-top: 0.15em;
+  margin-bottom: 0.15em;
+  line-height: 1.1;
+}
+
 .prose ul,
 .prose ol {
   margin-top: 0.5em;
@@ -226,4 +234,14 @@
 
 :root {
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer utilities {
+  .prose
+    :where(img.lilypond-score-block, img.lilypond-score-fullpage):not(
+      :where([class~="not-prose"], [class~="not-prose"] *)
+    ) {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+  }
 }

@@ -5,6 +5,7 @@ When you gaze into the blogs, they become shy.
 ## Ongoing
 
 - Avatar System 
+- Claw on the blog
 
 ## Journals
 

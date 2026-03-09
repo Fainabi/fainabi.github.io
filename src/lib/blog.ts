@@ -2,6 +2,7 @@ import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
 import { extractMeta, type ArticleMeta } from "@/lib/article-meta";
+import { replaceLilypondBlocks } from "@/lib/lilypond";
 
 // ── Types ──────────────────────────────────────────────────────────
 
@@ -181,9 +182,10 @@ export function getArticle(slugs: string[]): ArticleData | null {
 
   const raw = fs.readFileSync(filePath, "utf-8");
   const { data, content } = matter(raw);
-  const headings = extractHeadings(content);
+  const contentWithScores = replaceLilypondBlocks(content);
+  const headings = extractHeadings(contentWithScores);
 
-  return { content, frontmatter: data, headings };
+  return { content: contentWithScores, frontmatter: data, headings };
 }
 
 function extractHeadings(markdown: string): Heading[] {

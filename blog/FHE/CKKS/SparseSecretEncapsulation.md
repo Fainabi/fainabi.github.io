@@ -16,6 +16,12 @@ $\ModRaise$ : Lift ciphertext from $\mathcal{R}_{q_0}^2$ to $\mathcal{R}_{Q_L}^2
 SSE : Sparse Secret Encapsulation
 :::
 
+:::skill Sparse-secret encapsulation
+- key-switch from the dense secret $s$ to the sparse secret $s'$, using switching key $s\rightarrow s'$
+- mod-raise the ciphertext to $\mathcal{R}_{Q_L}$
+- key-switch back to the dense secret $s$ using switching key $s' \rightarrow s$
+:::
+
 The sparse secret encapsulation technique (SSE) `ModRaises` a ciphertext under a sprase secret, and switches back to a ciphertext at $Q_L$ under the original dense secret. Such operation controls the additional polynomial $I(X)$ as in $m + q_0 I(X)$, so that $\|I(X)\|$ is small, as it depends on the hamming weight of sparse secret.
 
 The SSE procedure is:
