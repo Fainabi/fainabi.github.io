@@ -165,11 +165,13 @@ export function MarkdownRenderer({ content, skipCallouts, skipSkills }: Markdown
             );
             if (nodes.length === 1) {
               const only = nodes[0];
-              if (
-                React.isValidElement(only) &&
+              const isLilypondImage =
+                React.isValidElement<{ src?: unknown; alt?: unknown }>(only) &&
                 only.type === "img" &&
                 typeof only.props.src === "string" &&
-                only.props.src.startsWith("/generated/lilypond/")
+                only.props.src.startsWith("/generated/lilypond/");
+              if (
+                isLilypondImage
               ) {
                 const modeRaw = String(only.props.alt ?? "").split("|")[1];
                 const mode = (modeRaw ?? "block").trim().toLowerCase();
