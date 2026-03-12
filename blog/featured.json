@@ -1,5 +1,32 @@
 [
   {
+    "title": "Session 02: Tool Use Dispatch & Safety",
+    "description": "quickview :",
+    "date": "2026-03-12",
+    "path": [
+      "learn-claude-code",
+      "s02-tool-use.md"
+    ]
+  },
+  {
+    "title": "Session 01: The Reactive Core - The Agent Loop",
+    "description": "quickview :",
+    "date": "2026-03-12",
+    "path": [
+      "learn-claude-code",
+      "s01-agent-loop.md"
+    ]
+  },
+  {
+    "title": "The Art of Homomorphism",
+    "description": "One action, many goals, if we preserve structure.",
+    "date": "2026-03-09",
+    "path": [
+      "Cat",
+      "The Art of Homomorphism.md"
+    ]
+  },
+  {
     "title": "Four-Part Harmony",
     "description": "Below are common chord connections in C major with figured bass and basic SATB realizations.",
     "date": "2026-03-04",
@@ -25,35 +52,6 @@
     "path": [
       "Cat",
       "Mein Cat.md"
-    ]
-  },
-  {
-    "title": "OpenClaw",
-    "description": "Latest blog article.",
-    "date": "2026-02-28",
-    "path": [
-      "AI",
-      "Platforms",
-      "OpenClaw.md"
-    ]
-  },
-  {
-    "title": "Dify",
-    "description": "Dify AI (dify.ai) is a code-less platform which builds AI workflow by integrating AI api setting and interactive workflow controlling.",
-    "date": "2026-02-28",
-    "path": [
-      "AI",
-      "Platforms",
-      "Dify.md"
-    ]
-  },
-  {
-    "title": "Coequalizer",
-    "description": "$X \\stackrel{f}{\\underset{g}{\\rightrightarrows}} Y \\stackrel{p}{\\rightarrow} \\text{coeq}$",
-    "date": "2026-02-25",
-    "path": [
-      "Cat",
-      "Coequalizer.md"
     ]
   }
 ]

@@ -17,11 +17,13 @@ import { preprocessPlots, type PlotConfig } from "@/lib/plot";
 import { preprocessSnippets, type SnippetConfig } from "@/lib/snippet";
 import { preprocessCallouts, type CalloutConfig } from "@/lib/callout";
 import { preprocessSkills, type SkillConfig } from "@/lib/skill";
+import { preprocessTerminal } from "@/lib/terminal";
 import { preprocessEquationRefs } from "@/lib/equation-ref";
 import { PlotChart } from "@/components/plot-chart";
 import { CodeSnippet } from "@/components/code-snippet";
 import { CalloutBlock } from "@/components/callout-block";
 import { SkillBlock } from "@/components/skill-block";
+import { Terminal } from "@/components/terminal";
 import React, { type ComponentPropsWithoutRef } from "react";
 
 interface MarkdownRendererProps {
@@ -102,6 +104,15 @@ function PreBlock({ children, isDarkTheme, ...rest }: PreBlockProps) {
         } catch { /* fall through */ }
       }
 
+      if (lang === "language-terminal") {
+        try {
+          const config = JSON.parse(text);
+          return <Terminal {...config} />;
+        } catch {
+          return <Terminal />;
+        }
+      }
+
       return (
         <SyntaxHighlighter
           language={language}
@@ -143,7 +154,8 @@ export function MarkdownRenderer({ content, skipCallouts, skipSkills }: Markdown
 
   const withCallouts = skipCallouts ? content : preprocessCallouts(content);
   const withSkills = skipSkills ? withCallouts : preprocessSkills(withCallouts);
-  const withSnippets = preprocessSnippets(withSkills);
+  const withTerminal = preprocessTerminal(withSkills);
+  const withSnippets = preprocessSnippets(withTerminal);
   const withPlots = preprocessPlots(withSnippets);
   const normalized = normalizeMathDelimiters(withPlots);
   const withEqRefs = preprocessEquationRefs(normalized);

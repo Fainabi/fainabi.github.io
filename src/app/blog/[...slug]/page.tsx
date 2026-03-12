@@ -18,6 +18,7 @@ import { QuickviewRenderer } from "@/components/quickview-renderer";
 import { TocSidebar } from "@/components/toc-sidebar";
 import { FlashcardSidebar } from "@/components/flashcard-sidebar";
 import { ArticleMetaBanner } from "@/components/article-meta-banner";
+import { FloatingTerminal } from "@/components/floating-terminal";
 import { extractFlashcards } from "@/lib/flashcards";
 import { extractMeta } from "@/lib/article-meta";
 import { extractInterests } from "@/lib/interests";
@@ -77,6 +78,7 @@ export default async function BlogSlugPage({ params }: BlogSlugPageProps) {
             </div>
           </aside>
         </div>
+        <FloatingTerminal attributes={meta.attributes} />
       </div>
     );
   }
