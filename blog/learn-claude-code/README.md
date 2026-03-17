@@ -40,5 +40,6 @@ To master the ideas in this repository, we will follow a structured path divided
 ## Navigation
 - [Session 01: The Reactive Core - The Agent Loop](./s01-agent-loop.md)
 - [Session 02: Tool Use Dispatch & Safety](./s02-tool-use.md)
-- [Session 03: TodoWrite - The Power of Planning](./s03-todo-write.md) (Coming soon)
+- [Session 03: TodoWrite - The Power of Planning](./s03-todo-write.md)
+- [Session 04: Subagents & Task Isolation](./s04-subagent.md) (Coming soon)
 ...

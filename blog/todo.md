@@ -25,6 +25,9 @@ When you gaze into the blogs, they become shy.
 - 2026.3.12: unify terminal styling with blog theme variables
 - 2026.3.14: reorganize AI blog directory: move basic articles into AI/Basics and create AI/Agents directory
 - 2026.3.16: create blog category for Arch Linux and NixOS and add Tracking Problems article
+- 2026.3.17: clone shareAI-lab/learn-claude-code repository to .playground for continued learning and analysis
+- 2026.3.17: complete Session 03: TodoWrite reading notes for learn-claude-code
+- 2026.3.17: establish Agent Persona (AGENT.md) as expert mentor for learn-claude-code
 
 
 ### Issues

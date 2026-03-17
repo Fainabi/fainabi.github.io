@@ -1,5 +1,31 @@
 [
   {
+    "title": "todo",
+    "description": "When you gaze into the blogs, they become shy.",
+    "date": "2026-03-17",
+    "path": [
+      "todo.md"
+    ]
+  },
+  {
+    "title": "AGENT",
+    "description": "I am a comprehensive expert in **Claude Code** and agentic workflows. My mission is to act as your technical mentor, deconstructing the `learn-claude-code` repository to help you master the architecture of modern AI agents.",
+    "date": "2026-03-17",
+    "path": [
+      "learn-claude-code",
+      "AGENT.md"
+    ]
+  },
+  {
+    "title": "Session 03: TodoWrite - The Power of Planning",
+    "description": "quickview :",
+    "date": "2026-03-17",
+    "path": [
+      "learn-claude-code",
+      "s03-todo-write.md"
+    ]
+  },
+  {
     "title": "Tracking Problems in Arch Linux",
     "description": "Arch Linux is a rolling-release distribution that prioritizes simplicity and customization. However, its \"bleeding edge\" nature can occasionally lead to issues that require manual intervention or specific workarounds. This article serves as a central tracker for such problems and their solutions.",
     "date": "2026-03-16",
@@ -7,14 +33,6 @@
       "OS",
       "Arch Linux",
       "Tracking Problems.md"
-    ]
-  },
-  {
-    "title": "todo",
-    "description": "When you gaze into the blogs, they become shy.",
-    "date": "2026-03-16",
-    "path": [
-      "todo.md"
     ]
   },
   {
@@ -35,26 +53,6 @@
       "AI",
       "Basics",
       "initialization.md"
-    ]
-  },
-  {
-    "title": "normalization",
-    "description": "During training a DL model, the input of each layer vary and may yield a very different distribution after epochs. It is called **interval covariant shift**. Covariant shift means the distribution of input changes between training and inference phases. We recommend to see [medium](https://becominghuman.ai/all-about-normalization-6ea79e70894b) for an intuitive view.",
-    "date": "2026-03-16",
-    "path": [
-      "AI",
-      "Basics",
-      "normalization.md"
-    ]
-  },
-  {
-    "title": "bitnet",
-    "description": "Quantization is an effective way to scale down LLM size, and as an acme, all parameters set to (nearly) one bit can significantly reduce LLM scale. That's BitNet family, created by [GeneralAI](https://aka.ms/GeneralAI).",
-    "date": "2026-03-16",
-    "path": [
-      "AI",
-      "Basics",
-      "bitnet.md"
     ]
   }
 ]
