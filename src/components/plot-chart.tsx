@@ -192,7 +192,7 @@ export function PlotChart({ config }: PlotChartProps) {
               borderRadius: "0.5rem",
               fontSize: 12,
             }}
-            formatter={(value: number | undefined) => value?.toFixed(4) ?? ""}
+            formatter={(value: any) => (typeof value === "number" ? value.toFixed(4) : value)}
             labelFormatter={(label: unknown) => `x = ${label}`}
           />
           <Legend

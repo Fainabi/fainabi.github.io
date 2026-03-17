@@ -8,7 +8,7 @@ When you gaze into the blogs, they become shy.
 - Claw on the blog
 - Mini web/blog agent (inspired by learn-claude-code)
 
-## Journals
+### Journals
 
 ### Development Journals
 
@@ -23,6 +23,9 @@ When you gaze into the blogs, they become shy.
 - 2026.3.12: complete Level 1 (Sessions 01-02) reading notes for learn-claude-code
 - 2026.3.12: implement FloatingTerminal and integrate into article meta (terminal attribute)
 - 2026.3.12: unify terminal styling with blog theme variables
+- 2026.3.14: reorganize AI blog directory: move basic articles into AI/Basics and create AI/Agents directory
+- 2026.3.16: create blog category for Arch Linux and NixOS and add Tracking Problems article
+
 
 ### Issues
 

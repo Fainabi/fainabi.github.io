@@ -1,57 +1,60 @@
 [
   {
-    "title": "Session 02: Tool Use Dispatch & Safety",
-    "description": "quickview :",
-    "date": "2026-03-12",
+    "title": "Tracking Problems in Arch Linux",
+    "description": "Arch Linux is a rolling-release distribution that prioritizes simplicity and customization. However, its \"bleeding edge\" nature can occasionally lead to issues that require manual intervention or specific workarounds. This article serves as a central tracker for such problems and their solutions.",
+    "date": "2026-03-16",
     "path": [
-      "learn-claude-code",
-      "s02-tool-use.md"
+      "OS",
+      "Arch Linux",
+      "Tracking Problems.md"
     ]
   },
   {
-    "title": "Session 01: The Reactive Core - The Agent Loop",
-    "description": "quickview :",
-    "date": "2026-03-12",
+    "title": "todo",
+    "description": "When you gaze into the blogs, they become shy.",
+    "date": "2026-03-16",
     "path": [
-      "learn-claude-code",
-      "s01-agent-loop.md"
+      "todo.md"
     ]
   },
   {
-    "title": "The Art of Homomorphism",
-    "description": "One action, many goals, if we preserve structure.",
-    "date": "2026-03-09",
+    "title": "attention",
+    "description": "Attention mechanism merges information from some context to input embeddings.",
+    "date": "2026-03-16",
     "path": [
-      "Cat",
-      "The Art of Homomorphism.md"
+      "AI",
+      "Basics",
+      "attention.md"
     ]
   },
   {
-    "title": "Four-Part Harmony",
-    "description": "Below are common chord connections in C major with figured bass and basic SATB realizations.",
-    "date": "2026-03-04",
+    "title": "initialization",
+    "description": "Assign all parameter to a same value. It introduces symmetry during training, which may harm performance.",
+    "date": "2026-03-16",
     "path": [
-      "Music Composition",
-      "Four-Part Harmony.md"
+      "AI",
+      "Basics",
+      "initialization.md"
     ]
   },
   {
-    "title": "SSH",
-    "description": "Use SSH so `git pull` and `git push` can authenticate with your key instead of username/password or PAT every time.",
-    "date": "2026-03-04",
+    "title": "normalization",
+    "description": "During training a DL model, the input of each layer vary and may yield a very different distribution after epochs. It is called **interval covariant shift**. Covariant shift means the distribution of input changes between training and inference phases. We recommend to see [medium](https://becominghuman.ai/all-about-normalization-6ea79e70894b) for an intuitive view.",
+    "date": "2026-03-16",
     "path": [
-      "Tools",
-      "Git",
-      "SSH.md"
+      "AI",
+      "Basics",
+      "normalization.md"
     ]
   },
   {
-    "title": "Mein Cat",
-    "description": "**Mein Cat** is a playful double entendre: a nod to *Mind* and a wink to *Category Theory*.",
-    "date": "2026-03-01",
+    "title": "bitnet",
+    "description": "Quantization is an effective way to scale down LLM size, and as an acme, all parameters set to (nearly) one bit can significantly reduce LLM scale. That's BitNet family, created by [GeneralAI](https://aka.ms/GeneralAI).",
+    "date": "2026-03-16",
     "path": [
-      "Cat",
-      "Mein Cat.md"
+      "AI",
+      "Basics",
+      "bitnet.md"
     ]
   }
 ]
