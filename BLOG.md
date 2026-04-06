@@ -38,10 +38,14 @@ Before marking a task as complete, agents should:
 - If a trigger event occurred, confirm `scan.py` finished without errors.
 - **Build Safety:** Run `npm run build` before a `git push` to ensure the site compiles correctly for GitHub deployment.
 
-## 5. Journaling
+## 5. Source Control
+- **Explicit Commits:** Agents MUST NOT stage or commit changes unless specifically instructed by the user.
+- **Commit Messages:** Propose a draft commit message and wait for confirmation if the instruction is ambiguous.
+
+## 6. Journaling
 Every time there's a structural modification, milestone, or significant change to the blog system (e.g., adding a new feature, rule, or script), a new entry MUST be added to the `### Development Journals` section in `blog/todo.md`. This is separate from git commits and acts as a quick-view history.
 
-## 6. Technology Stack Context
+## 7. Technology Stack Context
 - **Frontend:** Next.js (TypeScript) with Tailwind/Vanilla CSS.
 - **Legacy/Core:** Some logic remains in Elm; do not modify `.elm` files unless specifically instructed.
 - **Automation:** Python 3.x is used for markdown processing and asset generation.

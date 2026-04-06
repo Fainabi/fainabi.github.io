@@ -1,5 +1,14 @@
 [
   {
+    "title": "Monomorphism",
+    "description": "$f : \\forall a, \\forall b, f a = f b \\rightarrow a = b$",
+    "date": "2026-04-01",
+    "path": [
+      "Cat",
+      "Monomorphism.md"
+    ]
+  },
+  {
     "title": "todo",
     "description": "When you gaze into the blogs, they become shy.",
     "date": "2026-03-17",
@@ -43,16 +52,6 @@
       "AI",
       "Basics",
       "attention.md"
-    ]
-  },
-  {
-    "title": "initialization",
-    "description": "Assign all parameter to a same value. It introduces symmetry during training, which may harm performance.",
-    "date": "2026-03-16",
-    "path": [
-      "AI",
-      "Basics",
-      "initialization.md"
     ]
   }
 ]

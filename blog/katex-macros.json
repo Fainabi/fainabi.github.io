@@ -1,0 +1,39 @@
+{
+  "base": {
+    "\\bm": "\\boldsymbol{#1}",
+    "\\ip": "\\left\\langle #1 \\right\\rangle",
+    "\\of": "\\left(#1\\right)",
+    "\\ofc": "\\left\\{#1\\right\\}",
+    "\\abs": "\\left\\lvert #1 \\right\\rvert",
+    "\\norm": "\\left\\| #1 \\right\\|",
+    "\\round": "\\left\\lfloor #1 \\right\\rceil",
+    "\\floor": "\\left\\lfloor #1 \\right\\rfloor",
+    "\\binom": "\\begin{pmatrix} #1 \\\\ #2 \\end{pmatrix}",
+    "\\ceil": "\\left\\lceil #1 \\right\\rceil"
+  },
+  "wrapping": {
+    "mathbb": ["Z", "N", "Q", "R", "B", "C", "F", "H"],
+    "operatorname": ["Hom"],
+    "mathsf": [
+      "RLWE",
+      "CRT",
+      "ModRaise",
+      "DFT",
+      "iDFT",
+      "CtS",
+      "StC",
+      "EvalMod",
+      "Conv",
+      "ModUp",
+      "ModDown",
+      "PartialSum",
+      "swk",
+      "evk",
+      "ct",
+      "real",
+      "imag",
+      "SubSum",
+      "dnum"
+    ]
+  }
+}

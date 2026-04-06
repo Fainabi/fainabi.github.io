@@ -1,0 +1,31 @@
+{
+  "personal": [
+    "Homomorphisms make my life complete.",
+    "Privacy through math: FHE is the future.",
+    "Zero knowledge, 100% truth.",
+    "GPGPU: where parallelism meets beauty.",
+    "Commutative diagrams represent my life.",
+    "The world is a game, where knowledges are the rules we've found."
+  ],
+  "internet": [
+    "The internet is premier.",
+    "There is no place like 127.0.0.1.",
+    "Move fast and break things.",
+    "Debugging: being the detective in a movie where you are also the murderer.",
+    "Talk is cheap. Show me the code."
+  ],
+  "api_sources": [
+    {
+      "url": "https://api.quotable.io/random?tags=technology|wisdom|philosophy",
+      "key": "content"
+    },
+    {
+      "url": "https://techy-api.vercel.app/api/json",
+      "key": "message"
+    },
+    {
+      "url": "https://dummyjson.com/quotes/random",
+      "key": "quote"
+    }
+  ]
+}

@@ -28,6 +28,9 @@ When you gaze into the blogs, they become shy.
 - 2026.3.17: clone shareAI-lab/learn-claude-code repository to .playground for continued learning and analysis
 - 2026.3.17: complete Session 03: TodoWrite reading notes for learn-claude-code
 - 2026.3.17: establish Agent Persona (AGENT.md) as expert mentor for learn-claude-code
+- 2026.3.17: update BLOG.md to include explicit Source Control rules for agents
+- 2026.4.3: implement random slogan selection in Hero component from personal and internet sources
+- 2026.4.3: externalize slogans and KaTeX macros to blog/slogans.json and blog/katex-macros.json for easier editing
 
 
 ### Issues
