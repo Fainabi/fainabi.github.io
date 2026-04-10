@@ -1,57 +1,56 @@
 [
   {
-    "title": "Monomorphism",
-    "description": "$f : \\forall a, \\forall b, f a = f b \\rightarrow a = b$",
-    "date": "2026-04-01",
-    "path": [
-      "Cat",
-      "Monomorphism.md"
-    ]
-  },
-  {
-    "title": "todo",
-    "description": "When you gaze into the blogs, they become shy.",
-    "date": "2026-03-17",
-    "path": [
-      "todo.md"
-    ]
-  },
-  {
-    "title": "AGENT",
-    "description": "I am a comprehensive expert in **Claude Code** and agentic workflows. My mission is to act as your technical mentor, deconstructing the `learn-claude-code` repository to help you master the architecture of modern AI agents.",
-    "date": "2026-03-17",
+    "title": "Session 06: Context Compaction",
+    "description": "\"Context will fill up; you need a way to make room\" -- three-layer compression strategy for infinite sessions.",
+    "date": "2026-04-10",
     "path": [
       "learn-claude-code",
-      "AGENT.md"
+      "s06-context-compact.md"
+    ]
+  },
+  {
+    "title": "Session 05: Skill Loading & Knowledge Management",
+    "description": "\"Load knowledge when you need it, not upfront\" -- inject via tool_result, not the system prompt.",
+    "date": "2026-04-10",
+    "path": [
+      "learn-claude-code",
+      "s05-skill-loading.md"
+    ]
+  },
+  {
+    "title": "Session 04: Subagents & Task Isolation",
+    "description": "\"Break big tasks down; each subtask gets a clean context\" -- subagents use independent messages[], keeping the main conversation clean.",
+    "date": "2026-04-10",
+    "path": [
+      "learn-claude-code",
+      "s04-subagent.md"
     ]
   },
   {
     "title": "Session 03: TodoWrite - The Power of Planning",
     "description": "quickview :",
-    "date": "2026-03-17",
+    "date": "2026-04-10",
     "path": [
       "learn-claude-code",
       "s03-todo-write.md"
     ]
   },
   {
-    "title": "Tracking Problems in Arch Linux",
-    "description": "Arch Linux is a rolling-release distribution that prioritizes simplicity and customization. However, its \"bleeding edge\" nature can occasionally lead to issues that require manual intervention or specific workarounds. This article serves as a central tracker for such problems and their solutions.",
-    "date": "2026-03-16",
+    "title": "Session 02: Tool Use Dispatch & Safety",
+    "description": "quickview :",
+    "date": "2026-04-10",
     "path": [
-      "OS",
-      "Arch Linux",
-      "Tracking Problems.md"
+      "learn-claude-code",
+      "s02-tool-use.md"
     ]
   },
   {
-    "title": "attention",
-    "description": "Attention mechanism merges information from some context to input embeddings.",
-    "date": "2026-03-16",
+    "title": "Session 01: The Reactive Core - The Agent Loop",
+    "description": "quickview :",
+    "date": "2026-04-10",
     "path": [
-      "AI",
-      "Basics",
-      "attention.md"
+      "learn-claude-code",
+      "s01-agent-loop.md"
     ]
   }
 ]

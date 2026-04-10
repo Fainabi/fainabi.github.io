@@ -17,10 +17,16 @@ import { preprocessPlots, type PlotConfig } from "@/lib/plot";
 import { preprocessSnippets, type SnippetConfig } from "@/lib/snippet";
 import { preprocessCallouts, type CalloutConfig } from "@/lib/callout";
 import { preprocessSkills, type SkillConfig } from "@/lib/skill";
+import { preprocessSubblocks, type SubblockConfig } from "@/lib/subblock";
 import { preprocessTerminal } from "@/lib/terminal";
 import { preprocessEquationRefs } from "@/lib/equation-ref";
+import {
+  fencedCodeHighlighterCodeTagStyle,
+  fencedCodeHighlighterCustomStyle,
+} from "@/lib/fenced-code-highlighter-styles";
 import { PlotChart } from "@/components/plot-chart";
 import { CodeSnippet } from "@/components/code-snippet";
+import { SubblockViewer } from "@/components/subblock-viewer";
 import { CalloutBlock } from "@/components/callout-block";
 import { SkillBlock } from "@/components/skill-block";
 import { Terminal } from "@/components/terminal";
@@ -90,6 +96,13 @@ function PreBlock({ children, isDarkTheme, ...rest }: PreBlockProps) {
         } catch { /* fall through */ }
       }
 
+      if (lang === "language-subblock") {
+        try {
+          const config: SubblockConfig = JSON.parse(text);
+          return <SubblockViewer config={config} />;
+        } catch { /* fall through */ }
+      }
+
       if (lang === "language-callout") {
         try {
           const config: CalloutConfig = JSON.parse(text);
@@ -118,26 +131,8 @@ function PreBlock({ children, isDarkTheme, ...rest }: PreBlockProps) {
           language={language}
           style={isDarkTheme ? oneDark : oneLight}
           PreTag="div"
-          customStyle={{
-            margin: 0,
-            borderRadius: "0.5rem",
-            border: "1px solid var(--border)",
-            background: "var(--muted)",
-            padding: "1rem",
-            overflowX: "auto",
-            fontSize: "0.875rem",
-            lineHeight: "1.7",
-          }}
-          codeTagProps={{
-            style: {
-              fontFamily: "var(--font-mono)",
-              margin: 0,
-              padding: 0,
-              display: "block",
-              textIndent: 0,
-              whiteSpace: "pre",
-            },
-          }}
+          customStyle={fencedCodeHighlighterCustomStyle}
+          codeTagProps={{ style: fencedCodeHighlighterCodeTagStyle }}
         >
           {text.replace(/\n$/, "")}
         </SyntaxHighlighter>
@@ -155,7 +150,8 @@ export function MarkdownRenderer({ content, skipCallouts, skipSkills }: Markdown
   const withCallouts = skipCallouts ? content : preprocessCallouts(content);
   const withSkills = skipSkills ? withCallouts : preprocessSkills(withCallouts);
   const withTerminal = preprocessTerminal(withSkills);
-  const withSnippets = preprocessSnippets(withTerminal);
+  const withSubblocks = preprocessSubblocks(withTerminal);
+  const withSnippets = preprocessSnippets(withSubblocks);
   const withPlots = preprocessPlots(withSnippets);
   const normalized = normalizeMathDelimiters(withPlots);
   const withEqRefs = preprocessEquationRefs(normalized);

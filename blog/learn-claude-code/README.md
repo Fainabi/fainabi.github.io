@@ -41,5 +41,7 @@ To master the ideas in this repository, we will follow a structured path divided
 - [Session 01: The Reactive Core - The Agent Loop](./s01-agent-loop.md)
 - [Session 02: Tool Use Dispatch & Safety](./s02-tool-use.md)
 - [Session 03: TodoWrite - The Power of Planning](./s03-todo-write.md)
-- [Session 04: Subagents & Task Isolation](./s04-subagent.md) (Coming soon)
-...
+- [Session 04: Subagents & Task Isolation](./s04-subagent.md)
+- [Session 05: Skill Loading](./s05-skill-loading.md)
+- [Session 06: Context Compaction](./s06-context-compact.md)
+- [Session 07: Task System](./s07-task-system.md) (Coming soon)

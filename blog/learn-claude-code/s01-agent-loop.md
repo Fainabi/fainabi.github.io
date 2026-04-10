@@ -32,24 +32,26 @@ Try running some commands in this virtual OS. Your changes will persist in memor
 :::
 
 ### The Core Logic
-```python
+
+:::subblock python : The Reactive Loop
 def agent_loop(messages):
     while True:
-        # 1. Ask the brain
+[!!]
+        # Ask the Brain: Send current history and tool definitions
         response = client.messages.create(
             model=MODEL, 
             messages=messages, 
             tools=TOOLS
         )
-        
-        # 2. Record what the brain said
+[!!+endbreak]
+        # Record Response: Append the assistant's turn to history
         messages.append({"role": "assistant", "content": response.content})
-
-        # 3. Check the exit condition
+[!!+endbreak]
+        # Check Exit: Exit loop if the model is finished or requires user input
         if response.stop_reason != "tool_use":
-            break # The brain is done thinking/acting
-
-        # 4. Be the "hands": Execute tools and feed results back
+            break
+[!!+endbreak]
+        # Execute Tools: Process each tool call and collect execution output
         results = []
         for block in response.content:
             if block.type == "tool_use":
@@ -59,10 +61,11 @@ def agent_loop(messages):
                     "tool_use_id": block.id,
                     "content": output,
                 })
-        
-        # 5. Feed the results back as a "user" message
+[!!+endbreak]
+        # Add new message to the history
         messages.append({"role": "user", "content": results})
-```
+[!!]
+:::
 
 ## Key Architectural Insights
 1. **The "User" Persona for Tool Results:** Notice that tool results are appended with the role `"user"`. To the LLM, the "environment" (bash output) is just another user providing information.

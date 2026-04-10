@@ -23,7 +23,7 @@ Instead of relying on the model's internal memory, we give it an external, struc
 ### 1. The Todo Structure
 A plan is a list of tasks, each with a status: `pending`, `in_progress`, or `completed`. 
 
-```python
+:::subblock python : The TodoManager
 class TodoManager:
     def update(self, items: list) -> str:
         validated, in_progress_count = [], 0
@@ -36,14 +36,16 @@ class TodoManager:
                 "text": item["text"],
                 "status": status
             })
-        
-        # The Constraint: Focus on one thing at a time
+[!! 1. State Validation: Verify task format and track 'in_progress' count | items, in_progress_count, validated ]
+
         if in_progress_count > 1:
             raise ValueError("Only one task can be in_progress")
-            
+[!! 2. Focus Constraint: Enforce a single active task to prevent cognitive drifting | in_progress_count ]
+
         self.items = validated
         return self.render()
-```
+[!! 3. Persistence & Rendering: Commit the new state and return a readable string for the model | self.items, validated ]
+:::
 
 ### 2. The `todo` Tool
 We add a new tool to the dispatch map. This tool doesn't touch the filesystem; it only updates the `TodoManager`.
@@ -58,15 +60,15 @@ TOOL_HANDLERS = {
 ### 3. The "Nag" Reminder (Accountability)
 A plan is useless if the agent ignores it. To ensure the agent stays aligned, we implement a **Nag Mechanism**. If the agent goes 3 or more rounds without updating its plan, we inject a subtle nudge into the context.
 
-```python
+:::subblock python : The Nag Mechanism
 if rounds_since_todo >= 3 and messages:
     last_user_msg = messages[-1]
-    # Inject a reminder at the start of the user's next turn
     last_user_msg["content"].insert(0, {
         "type": "text",
         "text": "<reminder>Update your todos.</reminder>",
     })
-```
+[!! Inject Accountability: Force a status check if the model has drifted from its plan | rounds_since_todo, messages, last_user_msg ]
+:::
 
 ## What Changed: From Reactive to Proactive
 

@@ -31,6 +31,8 @@ When you gaze into the blogs, they become shy.
 - 2026.3.17: update BLOG.md to include explicit Source Control rules for agents
 - 2026.4.3: implement random slogan selection in Hero component from personal and internet sources
 - 2026.4.3: externalize slogans and KaTeX macros to blog/slogans.json and blog/katex-macros.json for easier editing
+- 2026.4.8: complete Level 2 (Sessions 04-06) reading notes for learn-claude-code, covering Subagents, Skill Loading, and Context Compaction.
+- 2026.4.8: implement "Code Subblock" feature: a three-column layout (Code, Description, Context) for structural code explanation.
 
 
 ### Issues

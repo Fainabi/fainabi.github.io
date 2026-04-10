@@ -222,6 +222,27 @@
   font-weight: 600;
 }
 
+/* One line box per row (incl. empty lines); matches fenced-code-highlighter-styles.ts */
+.subblock-syntax .subblock-code-line {
+  min-height: calc(0.875rem * 1.7);
+}
+
+/*
+ * Subblock inline line numbers: react-syntax-highlighter merges Prism `.comment`
+ * styles after `lineNumberStyle`, which overrides muted colors — force parity with gutter.
+ */
+.subblock-syntax .react-syntax-highlighter-line-number {
+  /* min-width: set per viewer via --subblock-line-num-min (global max line #, beats Prism merge). */
+  min-width: var(--subblock-line-num-min, 2.25em) !important;
+  text-align: right !important;
+  color: var(--muted-foreground) !important;
+  font-family: var(--font-mono) !important;
+  font-style: normal !important;
+  font-weight: 600 !important;
+  font-variant-numeric: tabular-nums;
+  opacity: 0.9;
+}
+
 /* ── KaTeX overrides ────────────────────────────────────────────── */
 
 .katex-display {

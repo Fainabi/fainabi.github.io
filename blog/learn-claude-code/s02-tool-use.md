@@ -19,59 +19,56 @@ While "Bash is all you need," it has significant downsides:
 Instead of hardcoding a call to `run_bash`, we create a mapping of tool names to specialized handler functions.
 
 ### 1. Path Sandboxing (Safety First)
-Before adding tools, we need a "Fence." The `safe_path` utility ensures the agent can never touch files outside the project root.
 
-```python
+:::subblock python : The Workspace Fence
 def safe_path(p: str) -> Path:
     path = (WORKDIR / p).resolve()
-    # Ensure the resolved path is still inside our WORKDIR
     if not path.is_relative_to(WORKDIR):
         raise ValueError(f"Path escapes workspace: {p}")
     return path
-```
+[!! Resolve and Validate: Ensure the agent cannot escape the project root | WORKDIR, path ]
+:::
 
 ### 2. Specialized Tool Handlers
-We define clean, Pythonic functions for common tasks. This makes the agent more robust and easier to monitor.
 
-```python
+:::subblock python : File Handlers
 def run_read(path: str, limit: int = None) -> str:
     text = safe_path(path).read_text()
-    # Logic to handle large files, line limits, etc.
     return text
+[!! Read File: Read and return file contents safely | path, text ]
 
 def run_write(path: str, content: str) -> str:
     fp = safe_path(path)
     fp.parent.mkdir(parents=True, exist_ok=True)
     fp.write_text(content)
     return f"Wrote to {path}"
-```
+[!! Write File: Create directories and write content safely | path, content, fp ]
+:::
 
 ### 3. The Dispatch Map
-This is the "switchboard" of the agent.
 
-```python
+:::subblock python : The Switchboard
 TOOL_HANDLERS = {
     "bash":       lambda **kw: run_bash(kw["command"]),
     "read_file":  lambda **kw: run_read(kw["path"], kw.get("limit")),
     "write_file": lambda **kw: run_write(kw["path"], kw["content"]),
     "edit_file":  lambda **kw: run_edit(kw["path"], kw["old_text"], kw["new_text"]),
 }
-```
+[!! Map Tools: Associate tool names with their safe handlers | TOOL_HANDLERS ]
+:::
 
 ## How the Loop Evolves (or Doesn't)
-The magic of this architecture is that the `agent_loop` remains virtually identical to Session 01. The only change is how we find the function to run:
 
-```python
-# Inside the loop...
+:::subblock python : Dynamic Dispatch
 for block in response.content:
     if block.type == "tool_use":
-        # Dynamic lookup instead of hardcoded bash
         handler = TOOL_HANDLERS.get(block.name)
         if handler:
             output = handler(**block.input)
         else:
             output = f"Unknown tool: {block.name}"
-```
+[!! Dispatch Logic: Look up the handler and execute it with input arguments | block.name, block.input, handler, output ]
+:::
 
 ## Key Architectural Insights
 1. **The Loop is a Infrastructure Layer:** Once the loop is written, you rarely touch it. It becomes a stable delivery mechanism for tools.
