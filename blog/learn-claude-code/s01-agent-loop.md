@@ -40,12 +40,12 @@ def agent_loop(messages):
         # Ask the Brain: Send current history and tool definitions
         response = client.messages.create(
             model=MODEL, 
-            messages=messages, 
+            messages=[@from messages 1],
             tools=TOOLS
         )
 [!!+endbreak]
         # Record Response: Append the assistant's turn to history
-        messages.append({"role": "assistant", "content": response.content})
+        [@to messages 1]messages.append({"role": "assistant", "content": response.content})
 [!!+endbreak]
         # Check Exit: Exit loop if the model is finished or requires user input
         if response.stop_reason != "tool_use":
@@ -63,7 +63,7 @@ def agent_loop(messages):
                 })
 [!!+endbreak]
         # Add new message to the history
-        messages.append({"role": "user", "content": results})
+        [@to messages 1]messages.append({"role": "user", "content": results})
 [!!]
 :::
 

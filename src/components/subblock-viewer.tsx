@@ -1,13 +1,28 @@
 "use client";
 
-import { useMemo, useState, type CSSProperties } from "react";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+  type CSSProperties,
+} from "react";
 import { useTheme } from "next-themes";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import {
   oneDark,
   oneLight,
 } from "react-syntax-highlighter/dist/esm/styles/prism";
-import type { SubblockConfig } from "@/lib/subblock";
+import {
+  firstLinkIdentifierOnLine,
+  subblockKwargPassSameIdRange,
+  subblockLineHasAppendOnId,
+  subblockLineHasLinkIdentifier,
+  type SubblockConfig,
+  type SubblockLinkAnchor,
+} from "@/lib/subblock";
 import { graphicForSubblockSegment } from "@/lib/subblock-description-graphic";
 import {
   fencedCodeHighlighterCodeTagStyle,
@@ -22,6 +37,17 @@ function firstNonEmptyLineIndex(lines: string[]): number {
   return i === -1 ? 0 : i;
 }
 
+function subblockLineLocalData(
+  lineNumber: number | undefined,
+  startLine: number,
+  lineCount: number,
+): { "data-subblock-local-line": string } | Record<string, never> {
+  if (typeof lineNumber !== "number" || lineCount === 0) return {};
+  return {
+    "data-subblock-local-line": String(lineNumber - startLine),
+  };
+}
+
 /** Same rule as react-syntax-highlighter `getEmWidthOfNumber(largestLineNumber)`. */
 function emMinWidthForMaxLineNumber(maxLine: number): string {
   const n = Math.max(1, Math.floor(maxLine));
@@ -32,6 +58,214 @@ function emMinWidthForMaxLineNumber(maxLine: number): string {
 function hasTextSelection(): boolean {
   if (typeof window === "undefined") return false;
   return (window.getSelection()?.toString() ?? "").length > 0;
+}
+
+function underLineNumber(n: Node, lineEl: HTMLElement): boolean {
+  let el: HTMLElement | null =
+    n.nodeType === Node.ELEMENT_NODE ? (n as HTMLElement) : n.parentElement;
+  while (el && el !== lineEl) {
+    if (el.classList?.contains("react-syntax-highlighter-line-number"))
+      return true;
+    el = el.parentElement;
+  }
+  return false;
+}
+
+/** Contiguous code text nodes on one highlighted line (excludes inline line number). */
+function getCodeTextSegments(lineEl: HTMLElement): { node: Text; len: number }[] {
+  const out: { node: Text; len: number }[] = [];
+  const walk = (node: Node): void => {
+    if (node.nodeType === Node.TEXT_NODE) {
+      const tn = node as Text;
+      const t = tn.textContent ?? "";
+      if (!underLineNumber(tn, lineEl) && t.length > 0) {
+        out.push({ node: tn, len: t.length });
+      }
+      return;
+    }
+    for (const c of node.childNodes) walk(c);
+  };
+  walk(lineEl);
+  return out;
+}
+
+/** Range over UTF-16 offsets into concatenated code text of `lineEl` (same basis as hover hit-test). */
+function getRangeForCodeSpan(
+  lineEl: HTMLElement,
+  start: number,
+  end: number,
+): Range | null {
+  if (typeof document === "undefined" || start < 0 || end <= start) return null;
+  const segs = getCodeTextSegments(lineEl);
+  let acc = 0;
+  const bounds: { node: Text; from: number; to: number }[] = [];
+  for (const { node, len } of segs) {
+    bounds.push({ node, from: acc, to: acc + len });
+    acc += len;
+  }
+  if (end > acc) return null;
+
+  let i = 0;
+  while (i < bounds.length && bounds[i]!.to <= start) i++;
+  const startSeg = bounds[i];
+  if (!startSeg) return null;
+  const sO = start - startSeg.from;
+
+  let j = i;
+  while (j < bounds.length && bounds[j]!.to < end) j++;
+  const endSeg = bounds[j];
+  if (!endSeg) return null;
+  const eO = end - endSeg.from;
+
+  const r = document.createRange();
+  const sLen = startSeg.node.textContent?.length ?? 0;
+  const eLen = endSeg.node.textContent?.length ?? 0;
+  r.setStart(startSeg.node, Math.min(Math.max(0, sO), sLen));
+  r.setEnd(endSeg.node, Math.min(Math.max(0, eO), eLen));
+  return r;
+}
+
+type SubblockLinkHintBox = {
+  kind: "from" | "to";
+  key: string;
+  left: number;
+  top: number;
+  width: number;
+  height: number;
+  /** Display line number (matches `lineProps` / `linkWire.line`). */
+  lineNumber: number;
+  id: string;
+  tag: string;
+};
+
+type SegmentWithLines = SubblockConfig["segments"][number] & {
+  startLine: number;
+  lineCount: number;
+  lines: string[];
+};
+
+function measureSubblockLinkHintBoxes(
+  root: HTMLElement | null,
+  segment: SegmentWithLines,
+  isFolded: boolean,
+  anchorLinkEnabled: boolean,
+): SubblockLinkHintBox[] {
+  if (!root || !anchorLinkEnabled) return [];
+  const withCols = (segment.linkAnchors ?? []).filter(
+    (
+      a,
+    ): a is SubblockLinkAnchor & { colStart: number; colEnd: number } =>
+      (a.kind === "from" || a.kind === "to") &&
+      a.colStart !== undefined &&
+      a.colEnd !== undefined,
+  );
+  if (!withCols.length) return [];
+  const foldedFocusLocalLine = firstNonEmptyLineIndex(segment.lines);
+  const cr = root.getBoundingClientRect();
+  const boxes: SubblockLinkHintBox[] = [];
+  for (const a of withCols) {
+    if (
+      isFolded &&
+      segment.lineCount > 1 &&
+      a.line !== foldedFocusLocalLine
+    ) {
+      continue;
+    }
+    const el = root.querySelector(`[data-subblock-local-line="${a.line}"]`);
+    if (!(el instanceof HTMLElement)) continue;
+    const range = getRangeForCodeSpan(el, a.colStart, a.colEnd);
+    if (!range) continue;
+    const br = range.getBoundingClientRect();
+    boxes.push({
+      kind: a.kind,
+      key: `${a.kind}-${a.line}-${a.id}-${a.tag}`,
+      left: br.left - cr.left,
+      top: br.top - cr.top,
+      width: Math.max(br.width, 4),
+      height: br.height,
+      lineNumber: segment.startLine + a.line,
+      id: a.id,
+      tag: a.tag,
+    });
+  }
+  return boxes;
+}
+
+/** Character offset into code text only (skip Prism inline line-number span). */
+function codeTextOffsetFromPoint(
+  lineEl: HTMLElement,
+  clientX: number,
+  clientY: number,
+): number | null {
+  if (typeof document === "undefined") return null;
+  const caretRangeFromPoint = (
+    document as Document & {
+      caretRangeFromPoint?: (x: number, y: number) => Range | null;
+    }
+  ).caretRangeFromPoint;
+  const dr = caretRangeFromPoint?.(clientX, clientY) ?? null;
+  if (!dr || !lineEl.contains(dr.startContainer)) return null;
+
+  let total = 0;
+  let found = false;
+
+  const visit = (node: Node): void => {
+    if (found) return;
+    if (node === dr.startContainer) {
+      if (node.nodeType === Node.TEXT_NODE && !underLineNumber(node, lineEl)) {
+        total += dr.startOffset;
+      }
+      found = true;
+      return;
+    }
+    if (node.nodeType === Node.TEXT_NODE) {
+      if (!underLineNumber(node, lineEl) && node.textContent) {
+        total += node.textContent.length;
+      }
+      return;
+    }
+    for (const c of node.childNodes) {
+      visit(c);
+    }
+  };
+
+  visit(lineEl);
+  return found ? total : null;
+}
+
+function pointerOverKwargPass(
+  lineEl: HTMLElement,
+  clientX: number,
+  clientY: number,
+  lineText: string,
+  id: string,
+): boolean {
+  const range = subblockKwargPassSameIdRange(lineText, id);
+  if (!range) return false;
+  const o = codeTextOffsetFromPoint(lineEl, clientX, clientY);
+  if (o === null) return false;
+  return o >= range.start && o < range.end;
+}
+
+/** `[@from]` with columns: only that span; legacy: whole rendered line. */
+function pickFromAnchorUnderPointer(
+  lineEl: HTMLElement,
+  clientX: number,
+  clientY: number,
+  lineText: string,
+  fromHere: SubblockLinkAnchor[],
+): SubblockLinkAnchor | null {
+  const o = codeTextOffsetFromPoint(lineEl, clientX, clientY);
+  if (o === null) return null;
+  for (const a of fromHere) {
+    if (a.colStart !== undefined && a.colEnd !== undefined) {
+      if (o >= a.colStart && o < a.colEnd) return a;
+    }
+  }
+  for (const a of fromHere) {
+    if (a.colStart === undefined) return a;
+  }
+  return null;
 }
 
 /** Stack segments as one continuous code strip; optional `gapBefore` starts a new strip. */
@@ -65,14 +299,71 @@ interface SubblockViewerProps {
  * Focus: FORCED FONT AND LINE-HEIGHT IDENTITY.
  */
 export function SubblockViewer({ config }: SubblockViewerProps) {
-  const { language, title, segments } = config;
+  const {
+    language,
+    title,
+    segments,
+    linkIdentifiers = [],
+    linkKwargAppend,
+  } = config;
+  const kwargAppendMode =
+    linkKwargAppend === true && linkIdentifiers.length === 1;
+  const kwargId = kwargAppendMode ? linkIdentifiers[0]! : null;
   // Do not trim segment `code` here: preprocessSubblocks already trims; re-trimming
   // would remove an intentional leading newline from `[!!+break]`.
   const { resolvedTheme } = useTheme();
   const isDarkTheme = resolvedTheme === "dark";
 
   const [folded, setFolded] = useState<Record<number, boolean>>({});
-  
+  /** Header `@link(id)`: hover line → highlight peer lines with same id (not `obj.id`). */
+  const [linkWire, setLinkWire] = useState<{
+    seg: number;
+    line: number;
+    id: string;
+    /** Set for `[@from]` / `[@to]` anchor mode; omitted for `@link` / kwarg-append. */
+    tag?: string;
+  } | null>(null);
+  const linkClearTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const anchorLinkEnabled = useMemo(
+    () => segments.some((s) => (s.linkAnchors?.length ?? 0) > 0),
+    [segments],
+  );
+  const linkHoverEnabled =
+    anchorLinkEnabled || linkIdentifiers.length > 0;
+
+  const cancelLinkClear = () => {
+    if (linkClearTimer.current) {
+      clearTimeout(linkClearTimer.current);
+      linkClearTimer.current = null;
+    }
+  };
+
+  const touchLinkWire = (seg: number, line: number, id: string, tag?: string) => {
+    cancelLinkClear();
+    setLinkWire(
+      tag !== undefined ? { seg, line, id, tag } : { seg, line, id },
+    );
+  };
+
+  const scheduleClearLinkWire = () => {
+    cancelLinkClear();
+    linkClearTimer.current = setTimeout(() => {
+      setLinkWire(null);
+      linkClearTimer.current = null;
+    }, 45);
+  };
+
+  useEffect(
+    () => () => {
+      cancelLinkClear();
+    },
+    [],
+  );
+
+  useEffect(() => {
+    setLinkWire(null);
+  }, [folded]);
+
   const toggleFold = (idx: number) => {
     setFolded(prev => ({ ...prev, [idx]: !prev[idx] }));
   };
@@ -115,6 +406,43 @@ export function SubblockViewer({ config }: SubblockViewerProps) {
 
   const lineNumberColumnMinWidth = emMinWidthForMaxLineNumber(maxLineInSubblock);
 
+  const codePaneRefs = useRef<Map<number, HTMLDivElement | null>>(new Map());
+  const [linkHintBoxesBySeg, setLinkHintBoxesBySeg] = useState<
+    Record<number, SubblockLinkHintBox[]>
+  >({});
+
+  const remeasureLinkHints = useCallback(() => {
+    const next: Record<number, SubblockLinkHintBox[]> = {};
+    for (let i = 0; i < segmentsWithLines.length; i++) {
+      next[i] = measureSubblockLinkHintBoxes(
+        codePaneRefs.current.get(i) ?? null,
+        segmentsWithLines[i]!,
+        Boolean(folded[i]),
+        anchorLinkEnabled,
+      );
+    }
+    setLinkHintBoxesBySeg(next);
+  }, [segmentsWithLines, folded, anchorLinkEnabled]);
+
+  useLayoutEffect(() => {
+    remeasureLinkHints();
+  }, [remeasureLinkHints, isDarkTheme]);
+
+  const remeasureLinkHintsRef = useRef(remeasureLinkHints);
+  remeasureLinkHintsRef.current = remeasureLinkHints;
+
+  useEffect(() => {
+    const rows: ResizeObserver[] = [];
+    for (let i = 0; i < segmentsWithLines.length; i++) {
+      const el = codePaneRefs.current.get(i);
+      if (!el) continue;
+      const ro = new ResizeObserver(() => remeasureLinkHintsRef.current());
+      ro.observe(el);
+      rows.push(ro);
+    }
+    return () => rows.forEach((r) => r.disconnect());
+  }, [segmentsWithLines.length, isDarkTheme]);
+
   return (
     <div className="not-prose my-10 overflow-hidden rounded-xl border bg-card shadow-sm transition-all group/container">
       {/* Integrated Minimal Utility Bar */}
@@ -145,7 +473,14 @@ export function SubblockViewer({ config }: SubblockViewerProps) {
 
       {/* Editor Surface — y-visible so segment hover shadows are not clipped */}
       <div className="relative overflow-x-auto overflow-y-visible bg-background">
-        <div className="flex min-w-[800px] flex-col px-4 pb-5 pt-3">
+        <div
+          className="flex min-w-[800px] flex-col px-4 pb-5 pt-3"
+          onMouseLeave={() => {
+            if (!linkHoverEnabled) return;
+            cancelLinkClear();
+            setLinkWire(null);
+          }}
+        >
           {segmentsWithLines.map((segment, idx) => {
             const totalSeg = segmentsWithLines.length;
             const isFolded = folded[idx];
@@ -242,7 +577,11 @@ export function SubblockViewer({ config }: SubblockViewerProps) {
                     </div>
                   )}
                   <div
-                    className={`transition-all duration-300 group-hover/seg:brightness-[1.02] dark:group-hover/seg:brightness-[1.05] ${isFolded ? "opacity-60" : ""}`}
+                    ref={(el) => {
+                      if (el) codePaneRefs.current.set(idx, el);
+                      else codePaneRefs.current.delete(idx);
+                    }}
+                    className={`relative transition-all duration-300 group-hover/seg:brightness-[1.02] dark:group-hover/seg:brightness-[1.05] ${isFolded ? "opacity-60" : ""}`}
                   >
                     <SyntaxHighlighter
                       language={language}
@@ -262,13 +601,285 @@ export function SubblockViewer({ config }: SubblockViewerProps) {
                         fontVariantNumeric: "tabular-nums",
                       }}
                       wrapLines
-                      lineProps={() => ({
-                        className: "subblock-code-line",
-                        style: { display: "block" },
-                      })}
+                      lineProps={(lineNumber) => {
+                        if (
+                          isFolded ||
+                          typeof lineNumber !== "number" ||
+                          segment.lineCount === 0 ||
+                          !linkHoverEnabled
+                        ) {
+                          return {
+                            className: "subblock-code-line",
+                            style: { display: "block" },
+                            ...subblockLineLocalData(
+                              lineNumber,
+                              segment.startLine,
+                              segment.lineCount,
+                            ),
+                          };
+                        }
+                        const localIdx = lineNumber - segment.startLine;
+                        const lineText = segment.lines[localIdx] ?? "";
+
+                        if (anchorLinkEnabled) {
+                          const anchorsHere =
+                            segment.linkAnchors?.filter(
+                              (a) => a.line === localIdx,
+                            ) ?? [];
+                          const fromHere = anchorsHere.filter(
+                            (a) => a.kind === "from",
+                          );
+                          const toHere = anchorsHere.filter(
+                            (a) => a.kind === "to",
+                          );
+                          const wire = linkWire;
+                          const isSource =
+                            wire !== null &&
+                            wire.tag !== undefined &&
+                            wire.seg === idx &&
+                            wire.line === lineNumber;
+                          const isPeer =
+                            wire !== null &&
+                            wire.tag !== undefined &&
+                            toHere.some(
+                              (t) =>
+                                t.id === wire.id && t.tag === wire.tag,
+                            ) &&
+                            !(
+                              wire.seg === idx && wire.line === lineNumber
+                            );
+
+                          const activateFromUnderPointer = (
+                            el: HTMLElement,
+                            cx: number,
+                            cy: number,
+                          ) => {
+                            const hit = pickFromAnchorUnderPointer(
+                              el,
+                              cx,
+                              cy,
+                              lineText,
+                              fromHere,
+                            );
+                            if (hit) {
+                              touchLinkWire(
+                                idx,
+                                lineNumber,
+                                hit.id,
+                                hit.tag,
+                              );
+                            } else {
+                              scheduleClearLinkWire();
+                            }
+                          };
+
+                          return {
+                            className: cn(
+                              "subblock-code-line",
+                              isPeer && "subblock-link-peer",
+                              isSource && "subblock-link-source",
+                            ),
+                            style: { display: "block" },
+                            ...subblockLineLocalData(
+                              lineNumber,
+                              segment.startLine,
+                              segment.lineCount,
+                            ),
+                            ...(fromHere.length || toHere.length
+                              ? {
+                                  onMouseEnter: (e) => {
+                                    if (toHere.length) cancelLinkClear();
+                                    if (fromHere.length) {
+                                      activateFromUnderPointer(
+                                        e.currentTarget,
+                                        e.clientX,
+                                        e.clientY,
+                                      );
+                                    }
+                                  },
+                                }
+                              : {}),
+                            ...(fromHere.length
+                              ? {
+                                  onMouseMove: (e) => {
+                                    activateFromUnderPointer(
+                                      e.currentTarget,
+                                      e.clientX,
+                                      e.clientY,
+                                    );
+                                  },
+                                }
+                              : {}),
+                            onMouseLeave: scheduleClearLinkWire,
+                          };
+                        }
+
+                        if (kwargAppendMode && kwargId && !anchorLinkEnabled) {
+                          const hasKwarg =
+                            subblockKwargPassSameIdRange(lineText, kwargId) !==
+                            null;
+                          const hasAppend = subblockLineHasAppendOnId(
+                            lineText,
+                            kwargId,
+                          );
+                          const wire = linkWire;
+                          const isSource =
+                            wire !== null &&
+                            wire.seg === idx &&
+                            wire.line === lineNumber &&
+                            hasKwarg &&
+                            wire.id === kwargId;
+                          const isPeer =
+                            wire !== null &&
+                            hasAppend &&
+                            !(wire.seg === idx && wire.line === lineNumber);
+
+                          const updateKwargPointer = (
+                            el: HTMLElement,
+                            cx: number,
+                            cy: number,
+                          ) => {
+                            if (
+                              pointerOverKwargPass(el, cx, cy, lineText, kwargId)
+                            ) {
+                              touchLinkWire(idx, lineNumber, kwargId);
+                            } else {
+                              scheduleClearLinkWire();
+                            }
+                          };
+
+                          return {
+                            className: cn(
+                              "subblock-code-line",
+                              isPeer && "subblock-link-peer",
+                              isSource && "subblock-link-source",
+                            ),
+                            style: { display: "block" },
+                            ...subblockLineLocalData(
+                              lineNumber,
+                              segment.startLine,
+                              segment.lineCount,
+                            ),
+                            ...(hasKwarg
+                              ? {
+                                  onMouseEnter: (e) => {
+                                    updateKwargPointer(
+                                      e.currentTarget,
+                                      e.clientX,
+                                      e.clientY,
+                                    );
+                                  },
+                                  onMouseMove: (e) => {
+                                    updateKwargPointer(
+                                      e.currentTarget,
+                                      e.clientX,
+                                      e.clientY,
+                                    );
+                                  },
+                                }
+                              : {}),
+                            ...(hasAppend
+                              ? {
+                                  onMouseEnter: () => {
+                                    cancelLinkClear();
+                                  },
+                                }
+                              : {}),
+                            onMouseLeave: scheduleClearLinkWire,
+                          };
+                        }
+
+                        const activeId = firstLinkIdentifierOnLine(
+                          lineText,
+                          linkIdentifiers,
+                        );
+                        const wire = linkWire;
+                        const isSource =
+                          wire !== null &&
+                          wire.tag === undefined &&
+                          wire.seg === idx &&
+                          wire.line === lineNumber &&
+                          wire.id === activeId &&
+                          activeId !== null;
+                        const isPeer =
+                          wire !== null &&
+                          wire.tag === undefined &&
+                          activeId !== null &&
+                          subblockLineHasLinkIdentifier(lineText, wire.id) &&
+                          (wire.seg !== idx || wire.line !== lineNumber);
+                        return {
+                          className: cn(
+                            "subblock-code-line",
+                            isPeer && "subblock-link-peer",
+                            isSource && "subblock-link-source",
+                          ),
+                          style: { display: "block" },
+                          ...subblockLineLocalData(
+                            lineNumber,
+                            segment.startLine,
+                            segment.lineCount,
+                          ),
+                          onMouseEnter: () => {
+                            if (activeId)
+                              touchLinkWire(idx, lineNumber, activeId);
+                          },
+                          onMouseLeave: scheduleClearLinkWire,
+                        };
+                      }}
                     >
                       {isFolded ? firstLine : segment.code}
                     </SyntaxHighlighter>
+                    {(linkHintBoxesBySeg[idx] ?? [])
+                      .filter((b) => {
+                        if (b.kind === "from") return true;
+                        const w = linkWire;
+                        return (
+                          w !== null &&
+                          w.tag !== undefined &&
+                          w.id === b.id &&
+                          w.tag === b.tag
+                        );
+                      })
+                      .map((b) => (
+                      <span
+                        key={b.key}
+                        className={
+                          b.kind === "from"
+                            ? "subblock-link-from-mark"
+                            : "subblock-link-to-mark"
+                        }
+                        style={{
+                          left: b.left,
+                          top: b.top,
+                          width: b.width,
+                          height: b.height,
+                        }}
+                        aria-hidden
+                        onMouseEnter={() => {
+                          cancelLinkClear();
+                          if (b.kind === "from") {
+                            touchLinkWire(
+                              idx,
+                              b.lineNumber,
+                              b.id,
+                              b.tag,
+                            );
+                          }
+                        }}
+                        onMouseMove={() => {
+                          cancelLinkClear();
+                          if (b.kind === "from") {
+                            touchLinkWire(
+                              idx,
+                              b.lineNumber,
+                              b.id,
+                              b.tag,
+                            );
+                          }
+                        }}
+                        onMouseLeave={scheduleClearLinkWire}
+                      />
+                    ))}
                   </div>
                 </div>
 

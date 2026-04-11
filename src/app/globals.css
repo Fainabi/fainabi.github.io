@@ -227,6 +227,38 @@
   min-height: calc(0.875rem * 1.7);
 }
 
+/* `@link(id)` hover: other lines with same identifier (not after `.`) */
+.subblock-syntax .subblock-link-peer {
+  background: color-mix(in oklch, var(--primary) 11%, transparent);
+  box-shadow: inset 3px 0 0 0 color-mix(in oklch, var(--primary) 50%, transparent);
+}
+
+.subblock-syntax .subblock-link-source {
+  background: color-mix(in oklch, var(--primary) 6%, transparent);
+}
+
+/* Column-scoped `[@from …]` RHS: receives hover (pointer-events) and forwards link wire in TS */
+.subblock-syntax .subblock-link-from-mark {
+  position: absolute;
+  z-index: 1;
+  box-sizing: border-box;
+  border-radius: 0.2rem;
+  border: 1px solid color-mix(in oklch, var(--primary) 40%, transparent);
+  background: color-mix(in oklch, var(--primary) 8%, transparent);
+  cursor: inherit;
+}
+
+/* Column-scoped `[@to …]` receiver: teal chart hue (not ring/primary) so glyphs stay crisp */
+.subblock-syntax .subblock-link-to-mark {
+  position: absolute;
+  z-index: 1;
+  box-sizing: border-box;
+  border-radius: 0.2rem;
+  border: 1px dashed color-mix(in oklch, var(--chart-2) 72%, transparent);
+  background: color-mix(in oklch, var(--chart-2) 18%, transparent);
+  cursor: inherit;
+}
+
 /*
  * Subblock inline line numbers: react-syntax-highlighter merges Prism `.comment`
  * styles after `lineNumberStyle`, which overrides muted colors — force parity with gutter.

@@ -153,7 +153,7 @@ function storyFeedResults(): string {
     "  messages.append( role: \"user\" , content: results )",
     "               │",
     "               ▼",
-    "   the shell “speaks” as a user turn —",
+    "   the shell \"speaks\" as a user turn —",
     "   LLM reads it on the next client.messages.create lap",
   ].join("\n");
 }
