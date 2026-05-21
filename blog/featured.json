@@ -1,8 +1,44 @@
 [
   {
+    "title": "Rautavaara — the Composer as Gardener",
+    "description": "\"I have often compared composing to gardening.\" Rautavaara's organic-growth poetics, and how it converges on Michelangelo's claim that the figure is already in the stone.",
+    "date": "2026-05-22",
+    "path": [
+      "Music Composition",
+      "Rautavaara - The Gardener.md"
+    ]
+  },
+  {
+    "title": "Subblock Feature Demo",
+    "description": "Demonstrating the new three-column code subblock feature for better structural explanation.",
+    "date": "2026-04-22",
+    "path": [
+      "test",
+      "subblock-demo.md"
+    ]
+  },
+  {
+    "title": "Session 03: TodoWrite - The Power of Planning",
+    "description": "quickview :",
+    "date": "2026-04-22",
+    "path": [
+      "learn-claude-code",
+      "s03-todo-write.md"
+    ]
+  },
+  {
+    "title": "Session 04: Subagents & Task Isolation",
+    "description": "\"Break big tasks down; each subtask gets a clean context\" -- subagents use independent messages[], keeping the main conversation clean.",
+    "date": "2026-04-22",
+    "path": [
+      "learn-claude-code",
+      "s04-subagent.md"
+    ]
+  },
+  {
     "title": "Session 06: Context Compaction",
     "description": "\"Context will fill up; you need a way to make room\" -- three-layer compression strategy for infinite sessions.",
-    "date": "2026-04-10",
+    "date": "2026-04-22",
     "path": [
       "learn-claude-code",
       "s06-context-compact.md"
@@ -11,46 +47,10 @@
   {
     "title": "Session 05: Skill Loading & Knowledge Management",
     "description": "\"Load knowledge when you need it, not upfront\" -- inject via tool_result, not the system prompt.",
-    "date": "2026-04-10",
+    "date": "2026-04-22",
     "path": [
       "learn-claude-code",
       "s05-skill-loading.md"
-    ]
-  },
-  {
-    "title": "Session 04: Subagents & Task Isolation",
-    "description": "\"Break big tasks down; each subtask gets a clean context\" -- subagents use independent messages[], keeping the main conversation clean.",
-    "date": "2026-04-10",
-    "path": [
-      "learn-claude-code",
-      "s04-subagent.md"
-    ]
-  },
-  {
-    "title": "Session 03: TodoWrite - The Power of Planning",
-    "description": "quickview :",
-    "date": "2026-04-10",
-    "path": [
-      "learn-claude-code",
-      "s03-todo-write.md"
-    ]
-  },
-  {
-    "title": "Session 02: Tool Use Dispatch & Safety",
-    "description": "quickview :",
-    "date": "2026-04-10",
-    "path": [
-      "learn-claude-code",
-      "s02-tool-use.md"
-    ]
-  },
-  {
-    "title": "Session 01: The Reactive Core - The Agent Loop",
-    "description": "quickview :",
-    "date": "2026-04-10",
-    "path": [
-      "learn-claude-code",
-      "s01-agent-loop.md"
     ]
   }
 ]
